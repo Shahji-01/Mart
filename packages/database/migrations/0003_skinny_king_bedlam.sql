@@ -1,0 +1,1 @@
+ALTER TABLE "cart_sessions" ADD COLUMN "pincode" text;

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>NTC Mart — Nageshwara Trading Company, Banswara</title>
+    <meta name="description" content="NTC Mart (Nageshwara Trading Company) — Banswara's best online grocery store. Fresh vegetables, fruits, dairy, and daily essentials delivered same day." />
+    <meta name="theme-color" content="#2d7a2d" />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:title" content="NTC Mart — Fresh Groceries in Banswara" />
+    <meta property="og:description" content="Shop fresh vegetables, fruits, dairy & daily essentials with same-day delivery in Banswara, Rajasthan." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="NTC Mart — Nageshwara Trading Company" />
+    <meta name="twitter:description" content="Banswara's best online grocery store — fresh produce, same day delivery." />
+    <link rel="icon" type="image/png" href="/ntcmart-logo.png" />
+    <link rel="apple-touch-icon" href="/ntcmart-logo.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(() => {});
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,4 @@
+- [Loyalty/Wallet system](loyalty-wallet.md) — earning rate 0.1pts/₹, redeem 4pts=₹1; /balance sub-routes are required by checkout
+- [Cart coupon state](cart-coupon-state.md) — coupons stored in in-memory Map; cleared on server restart; acceptable for phase 1
+- [DB lib rebuild](db-lib-rebuild.md) — after adding columns to lib/db schemas, must run `pnpm run typecheck:libs` before api-server typecheck or TS errors appear as if new columns don't exist.
+- [walletTransactions schema](wallet-schema.md) — walletTransactionsTable uses `description` (not `note`) for the text field; enum type is "credit"|"debit"|"refund".
