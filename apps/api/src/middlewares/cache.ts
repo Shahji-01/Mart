@@ -1,10 +1,5 @@
-import { LRUCache } from "lru-cache";
 import type { Request, Response, NextFunction } from "express";
-
-const cache = new LRUCache<string, any>({
-  max: 100, // Maximum number of items
-  ttl: 1000 * 60 * 5, // 5 minutes TTL
-});
+import { cacheService, cache } from "../services/cache.service";
 
 export const cacheMiddleware = (req: Request, res: Response, next: NextFunction) => {
   if (req.method !== "GET") {
@@ -33,5 +28,5 @@ export const cacheMiddleware = (req: Request, res: Response, next: NextFunction)
 };
 
 export const clearCache = () => {
-  cache.clear();
+  cacheService.clear();
 };

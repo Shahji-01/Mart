@@ -120,6 +120,7 @@ export class ProductsService {
     }
     const [cat] = await db.select().from(categoriesTable).where(eq(categoriesTable.id, p.categoryId));
     cacheService.invalidate("products_");
+    cacheService.invalidate("/api/products");
     return await formatProduct(p, cat?.name ?? "");
   }
 
@@ -156,6 +157,7 @@ export class ProductsService {
     }
     const [cat] = await db.select().from(categoriesTable).where(eq(categoriesTable.id, copy.categoryId));
     cacheService.invalidate("products_");
+    cacheService.invalidate("/api/products");
     return await formatProduct(copy, cat?.name ?? "");
   }
 
@@ -170,6 +172,7 @@ export class ProductsService {
   async deleteProduct(id: number) {
     const result = await db.delete(productsTable).where(eq(productsTable.id, id));
     cacheService.invalidate("products_");
+    cacheService.invalidate("/api/products");
     return result;
   }
 
@@ -202,6 +205,7 @@ export class ProductsService {
     const [v] = await db.update(productVariantsTable).set({ stock }).where(eq(productVariantsTable.id, variantId)).returning();
     if (!v) return null;
     cacheService.invalidate("products_");
+    cacheService.invalidate("/api/products");
     // Back-in-stock notifier (R28): when a variant transitions from out-of-stock
     // to in-stock, alert everyone subscribed and mark them notified (once).
     if ((before?.stock ?? 0) <= 0 && stock > 0) {
@@ -219,6 +223,7 @@ export class ProductsService {
     const [v] = await db.update(productVariantsTable).set(updates).where(eq(productVariantsTable.id, variantId)).returning();
     if (!v) return null;
     cacheService.invalidate("products_");
+    cacheService.invalidate("/api/products");
     return { id: v.id, productId: v.productId, unit: v.unit, unitValue: v.unitValue, price: parseFloat(v.price), mrp: parseFloat(v.mrp), sku: v.sku, stock: v.stock };
   }
 
@@ -226,6 +231,7 @@ export class ProductsService {
     const [v] = await db.update(productVariantsTable).set({ unit, unitValue }).where(eq(productVariantsTable.id, variantId)).returning();
     if (!v) return null;
     cacheService.invalidate("products_");
+    cacheService.invalidate("/api/products");
     return { id: v.id, productId: v.productId, unit: v.unit, unitValue: v.unitValue, price: parseFloat(v.price), mrp: parseFloat(v.mrp), sku: v.sku, stock: v.stock };
   }
 
@@ -278,6 +284,7 @@ export class ProductsService {
       return u;
     }));
     cacheService.invalidate("products_");
+    cacheService.invalidate("/api/products");
     return updated.map(v => ({ id: v?.id, price: v ? parseFloat(v.price) : 0 }));
   }
 }
