@@ -126,6 +126,32 @@ export class ProductsController {
     } catch (err) { next(err); }
   }
 
+  async updateVariantPrice(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { variantId } = getValidated(req).params;
+      const { price, mrp } = req.body;
+      const result = await productsService.updateVariantPrice(parseInt(variantId as string), price, mrp);
+      if (!result) {
+        res.status(404).json({ error: "Variant not found" });
+        return;
+      }
+      res.json(result);
+    } catch (err) { next(err); }
+  }
+
+  async updateVariantDetails(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { variantId } = getValidated(req).params;
+      const { unit, unitValue } = req.body;
+      const result = await productsService.updateVariantDetails(parseInt(variantId as string), unit, unitValue);
+      if (!result) {
+        res.status(404).json({ error: "Variant not found" });
+        return;
+      }
+      res.json(result);
+    } catch (err) { next(err); }
+  }
+
   async bulkUpdateVariantPrice(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = getValidated(req).params;

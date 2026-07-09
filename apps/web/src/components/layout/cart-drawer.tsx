@@ -1,13 +1,15 @@
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from "@/components/ui/sheet";
-import { useGetCart, getGetCartQueryKey, useUpdateCartItem, useRemoveFromCart } from "@workspace/api-client";
+import { useGetCart, getGetCartQueryKey, useUpdateCartItem, useRemoveFromCart, useApplyCoupon, useRemoveCoupon, useGetCouponSuggestions, getGetCouponSuggestionsQueryKey } from "@workspace/api-client";
 import { authStore } from "@/lib/auth-store";
 import { useUIStore } from "@/lib/ui-store";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { ShoppingBag, Plus, Minus, Trash2, ChevronRight, X } from "lucide-react";
+import { ShoppingBag, Plus, Minus, Trash2, ChevronRight, X, Tag, Loader2 } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
 
 export function CartDrawer() {
   const { isCartOpen, closeCart } = useUIStore();
@@ -18,9 +20,30 @@ export function CartDrawer() {
   });
 
   const qc = useQueryClient();
+  const { toast } = useToast();
   const updateCart = useUpdateCartItem();
   const removeFromCart = useRemoveFromCart();
+  const applyCoupon = useApplyCoupon();
+  const removeCoupon = useRemoveCoupon();
   const [loadingId, setLoadingId] = useState<number | null>(null);
+  const [couponInput, setCouponInput] = useState("");
+  
+  const { data: suggestionsData } = useGetCouponSuggestions({
+    query: { enabled: !!token && isCartOpen && !cart?.couponCode, queryKey: getGetCouponSuggestionsQueryKey() },
+  });
+  const suggestions = suggestionsData ?? [];
+  
+  const sortedSuggestions = [...suggestions].sort((a, b) => {
+    const subtotal = cart?.subtotal ?? 0;
+    const aEligible = subtotal >= a.minOrderValue;
+    const bEligible = subtotal >= b.minOrderValue;
+    if (aEligible && !bEligible) return -1;
+    if (!aEligible && bEligible) return 1;
+    return b.discountValue - a.discountValue; // Sort by discount value if both have same eligibility
+  });
+
+  const isApplyingCoupon = applyCoupon.isPending;
+  const isRemovingCoupon = removeCoupon.isPending;
 
   const items = cart?.items || [];
   const isEmpty = items.length === 0;
@@ -40,6 +63,28 @@ export function CartDrawer() {
       await removeFromCart.mutateAsync({ variantId });
       qc.invalidateQueries({ queryKey: getGetCartQueryKey() });
     } finally { setLoadingId(null); }
+  }
+
+  async function handleApplyCoupon() {
+    if (!couponInput.trim()) return;
+    try {
+      await applyCoupon.mutateAsync({ data: { code: couponInput.trim() } });
+      qc.invalidateQueries({ queryKey: getGetCartQueryKey() });
+      toast({ title: "Coupon applied successfully" });
+      setCouponInput("");
+    } catch (err: any) {
+      toast({ title: "Failed to apply coupon", description: err.message || "Invalid coupon", variant: "destructive" });
+    }
+  }
+
+  async function handleRemoveCoupon() {
+    try {
+      await removeCoupon.mutateAsync();
+      qc.invalidateQueries({ queryKey: getGetCartQueryKey() });
+      toast({ title: "Coupon removed" });
+    } catch (err: any) {
+      toast({ title: "Failed to remove coupon", variant: "destructive" });
+    }
   }
 
   return (
@@ -153,12 +198,106 @@ export function CartDrawer() {
               </div>
 
               <div className="bg-card rounded-2xl border shadow-sm p-4">
+                {cart?.couponCode ? (
+                  <div className="flex items-center justify-between bg-emerald-50 border border-emerald-200 rounded-xl p-3">
+                    <div className="flex items-center gap-2">
+                      <Tag className="h-4 w-4 text-emerald-600" />
+                      <div>
+                        <p className="text-sm font-bold text-emerald-800">'{cart.couponCode}' applied</p>
+                        <p className="text-xs text-emerald-600">You saved ₹{cart.discount}</p>
+                      </div>
+                    </div>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={handleRemoveCoupon}
+                      disabled={isRemovingCoupon}
+                      className="text-red-500 hover:text-red-600 hover:bg-red-50 h-8 px-2"
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="flex gap-2">
+                    <div className="relative flex-1">
+                      <Tag className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input 
+                        placeholder="Enter coupon code" 
+                        value={couponInput}
+                        onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
+                        className="pl-9 bg-muted/50 border-0 h-10 uppercase"
+                      />
+                    </div>
+                    <Button 
+                      variant="secondary"
+                      onClick={handleApplyCoupon}
+                      disabled={!couponInput.trim() || isApplyingCoupon}
+                      className="h-10 px-4"
+                    >
+                      {isApplyingCoupon ? <Loader2 className="h-4 w-4 animate-spin" /> : "Apply"}
+                    </Button>
+                  </div>
+                )}
+
+                {!cart?.couponCode && sortedSuggestions.length > 0 && (
+                  <div className="mt-4 space-y-2">
+                    <p className="text-xs text-muted-foreground font-medium flex items-center gap-1">Available coupons</p>
+                    <div className="flex flex-col gap-2 max-h-[240px] overflow-y-auto pr-2">
+                      {sortedSuggestions.map(s => {
+                        const isEligible = (cart?.subtotal ?? 0) >= s.minOrderValue;
+                        return (
+                          <button
+                            key={s.code}
+                            type="button"
+                            onClick={() => {
+                              if (!isEligible) {
+                                toast({ title: `Add items worth ₹${(s.minOrderValue - (cart?.subtotal ?? 0)).toFixed(0)} more to use this coupon`, variant: "destructive" });
+                                return;
+                              }
+                              setCouponInput(s.code);
+                              applyCoupon.mutate({ data: { code: s.code } }, {
+                                onSuccess: (c) => { 
+                                  qc.invalidateQueries({ queryKey: getGetCartQueryKey() }); 
+                                  toast({ title: `Coupon applied! Saved ₹${c.discount.toFixed(0)}` }); 
+                                  setCouponInput("");
+                                },
+                                onError: (error: any) => {
+                                  const message = error.response?.data?.error || error.response?.error || error.message || "Coupon not applicable";
+                                  toast({ title: message, variant: "destructive" });
+                                },
+                              });
+                            }}
+                            className={`w-full text-left flex items-center gap-3 border border-dashed rounded-lg px-3 py-2 transition-colors group ${isEligible ? 'border-primary/60 hover:bg-primary/5 cursor-pointer' : 'border-muted opacity-60 cursor-not-allowed'}`}
+                          >
+                            <span className="bg-primary/10 text-primary font-mono font-bold text-xs px-2 py-0.5 rounded group-hover:bg-primary group-hover:text-primary-foreground transition-colors">{s.code}</span>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs font-medium truncate">{s.description}</p>
+                              {s.minOrderValue > 0 && <p className="text-[10px] text-muted-foreground">Min order ₹{s.minOrderValue}</p>}
+                            </div>
+                            <span className="text-xs font-bold text-primary flex-shrink-0">
+                              {s.discountType === "percentage" ? `${s.discountValue}% OFF` : `₹${s.discountValue} OFF`}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="bg-card rounded-2xl border shadow-sm p-4">
                 <h4 className="font-bold mb-3 text-sm">Bill Details</h4>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between text-muted-foreground">
                     <span>Item Total</span>
                     <span>₹{cart?.subtotal}</span>
                   </div>
+                  {(cart?.discount ?? 0) > 0 && (
+                    <div className="flex justify-between text-emerald-600 font-medium">
+                      <span>Item Discount</span>
+                      <span>-₹{cart!.discount}</span>
+                    </div>
+                  )}
                   <div className="flex justify-between text-muted-foreground">
                     <span>Delivery Fee</span>
                     {cart?.deliveryFee === 0 ? (

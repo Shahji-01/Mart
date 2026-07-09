@@ -76,6 +76,26 @@ export const updateVariantStockSchema = z.object({
   }),
 });
 
+export const updateVariantPriceSchema = z.object({
+  params: z.object({
+    variantId: z.string().regex(/^\d+$/, "ID must be a number"),
+  }),
+  body: z.object({
+    price: z.number().nonnegative(),
+    mrp: z.number().positive().optional(),
+  }),
+});
+
+export const updateVariantDetailsSchema = z.object({
+  params: z.object({
+    variantId: z.string().regex(/^\d+$/, "ID must be a number"),
+  }),
+  body: z.object({
+    unit: z.string().min(1),
+    unitValue: z.string().min(1),
+  }),
+});
+
 export const bulkUpdatePriceSchema = z.object({
   params: z.object({
     id: z.string().regex(/^\d+$/, "ID must be a number"),

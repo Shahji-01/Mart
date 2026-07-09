@@ -212,6 +212,23 @@ export class ProductsService {
     return { id: v.id, productId: v.productId, unit: v.unit, unitValue: v.unitValue, price: parseFloat(v.price), mrp: parseFloat(v.mrp), sku: v.sku, stock: v.stock };
   }
 
+  async updateVariantPrice(variantId: number, price: number, mrp?: number) {
+    const updates: any = { price: price.toFixed(2) };
+    if (mrp !== undefined) updates.mrp = mrp.toFixed(2);
+    
+    const [v] = await db.update(productVariantsTable).set(updates).where(eq(productVariantsTable.id, variantId)).returning();
+    if (!v) return null;
+    cacheService.invalidate("products_");
+    return { id: v.id, productId: v.productId, unit: v.unit, unitValue: v.unitValue, price: parseFloat(v.price), mrp: parseFloat(v.mrp), sku: v.sku, stock: v.stock };
+  }
+
+  async updateVariantDetails(variantId: number, unit: string, unitValue: string) {
+    const [v] = await db.update(productVariantsTable).set({ unit, unitValue }).where(eq(productVariantsTable.id, variantId)).returning();
+    if (!v) return null;
+    cacheService.invalidate("products_");
+    return { id: v.id, productId: v.productId, unit: v.unit, unitValue: v.unitValue, price: parseFloat(v.price), mrp: parseFloat(v.mrp), sku: v.sku, stock: v.stock };
+  }
+
   /** Notify all pending subscribers that a variant is back in stock (idempotent). */
   private async notifyBackInStock(variantId: number) {
     const subs = await db.select().from(stockNotificationsTable)

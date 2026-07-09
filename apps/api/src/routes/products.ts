@@ -11,6 +11,8 @@ import {
   createProductSchema,
   updateProductSchema,
   updateVariantStockSchema,
+  updateVariantPriceSchema,
+  updateVariantDetailsSchema,
   bulkUpdatePriceSchema
 } from "../schemas/products.schema";
 
@@ -29,6 +31,8 @@ router.patch("/products/:id", requireAdmin, validateRequest(updateProductSchema)
 router.delete("/products/:id", requireAdmin, validateRequest(productIdParamSchema), productsController.deleteProduct);
 
 router.patch("/products/variants/:variantId/stock", requireAdmin, validateRequest(updateVariantStockSchema), productsController.updateVariantStock);
+router.patch("/products/variants/:variantId/price", requireAdmin, validateRequest(updateVariantPriceSchema), productsController.updateVariantPrice);
+router.patch("/products/variants/:variantId/details", requireAdmin, validateRequest(updateVariantDetailsSchema), productsController.updateVariantDetails);
 router.patch("/products/:id/variants/bulk-price", requireAdmin, validateRequest(bulkUpdatePriceSchema), productsController.bulkUpdateVariantPrice);
 
 router.post("/products/variants/:variantId/notify-me", requireAuth, validateRequest(variantIdParamSchema), productsController.notifyMe);

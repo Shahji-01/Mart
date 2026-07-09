@@ -50,6 +50,81 @@ function StockCell({ variant, onSave }: { variant: Variant; onSave: (id: number,
   );
 }
 
+function PriceCell({ variant, onSave }: { variant: Variant; onSave: (id: number, price: number) => void }) {
+  const [editing, setEditing] = useState(false);
+  const [val, setVal] = useState(variant.price);
+
+  if (editing) {
+    return (
+      <div className="flex items-center gap-1">
+        <Input
+          type="number"
+          value={val}
+          min={0}
+          step="0.01"
+          onChange={e => setVal(parseFloat(e.target.value) || 0)}
+          className="h-7 w-20 text-xs"
+        />
+        <button onClick={() => { onSave(variant.id, val); setEditing(false); }} className="p-1 text-green-600 hover:bg-green-50 rounded">
+          <Check className="h-3.5 w-3.5" />
+        </button>
+        <button onClick={() => { setVal(variant.price); setEditing(false); }} className="p-1 text-red-500 hover:bg-red-50 rounded">
+          <X className="h-3.5 w-3.5" />
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <button onClick={() => setEditing(true)} className="flex items-center gap-1.5 group rounded px-1.5 py-0.5 hover:bg-muted transition-colors cursor-pointer">
+      <span className="font-medium text-sm">
+        ₹{variant.price}
+      </span>
+      <Edit2 className="h-3 w-3 text-muted-foreground/50 group-hover:text-primary transition-colors" />
+    </button>
+  );
+}
+
+function VariantDetailsCell({ variant, onSave }: { variant: Variant; onSave: (id: number, unit: string, unitValue: string) => void }) {
+  const [editing, setEditing] = useState(false);
+  const [unit, setUnit] = useState(variant.unit);
+  const [unitValue, setUnitValue] = useState(variant.unitValue);
+
+  if (editing) {
+    return (
+      <div className="flex items-center gap-1">
+        <Input
+          value={unitValue}
+          onChange={e => setUnitValue(e.target.value)}
+          className="h-7 w-12 text-xs px-1"
+          placeholder="Val"
+        />
+        <Input
+          value={unit}
+          onChange={e => setUnit(e.target.value)}
+          className="h-7 w-14 text-xs px-1"
+          placeholder="Unit"
+        />
+        <button onClick={() => { onSave(variant.id, unit, unitValue); setEditing(false); }} className="p-1 text-green-600 hover:bg-green-50 rounded flex-shrink-0">
+          <Check className="h-3.5 w-3.5" />
+        </button>
+        <button onClick={() => { setUnit(variant.unit); setUnitValue(variant.unitValue); setEditing(false); }} className="p-1 text-red-500 hover:bg-red-50 rounded flex-shrink-0">
+          <X className="h-3.5 w-3.5" />
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <button onClick={() => setEditing(true)} className="flex items-center gap-1.5 group rounded px-1.5 py-0.5 hover:bg-muted transition-colors cursor-pointer text-left">
+      <span className="text-sm text-muted-foreground line-clamp-1">
+        {variant.unitValue} {variant.unit}
+      </span>
+      <Edit2 className="h-3 w-3 text-muted-foreground/50 group-hover:text-primary transition-colors flex-shrink-0" />
+    </button>
+  );
+}
+
 export default function AdminInventory() {
   const token = authStore.getToken();
   const { toast } = useToast();
@@ -82,6 +157,40 @@ export default function AdminInventory() {
       toast({ title: "Stock updated" });
     },
     onError: () => toast({ title: "Failed to update stock", variant: "destructive" }),
+  });
+
+  const updatePrice = useMutation({
+    mutationFn: async ({ variantId, price }: { variantId: number; price: number }) => {
+      const res = await customFetch(`/api/products/variants/${variantId}/price`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ price }),
+      });
+      if (!res.ok) throw new Error("Failed");
+      return res.json();
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["admin-inventory"] });
+      toast({ title: "Price updated" });
+    },
+    onError: () => toast({ title: "Failed to update price", variant: "destructive" }),
+  });
+
+  const updateVariantDetails = useMutation({
+    mutationFn: async ({ variantId, unit, unitValue }: { variantId: number; unit: string; unitValue: string }) => {
+      const res = await customFetch(`/api/products/variants/${variantId}/details`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ unit, unitValue }),
+      });
+      if (!res.ok) throw new Error("Failed");
+      return res.json();
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["admin-inventory"] });
+      toast({ title: "Variant updated" });
+    },
+    onError: () => toast({ title: "Failed to update variant", variant: "destructive" }),
   });
 
   const allVariants = products.flatMap(p =>
@@ -196,10 +305,18 @@ export default function AdminInventory() {
                     <div className="col-span-2">
                       <Badge variant="outline" className="text-xs">{v.categoryName}</Badge>
                     </div>
-                    <div className="col-span-2 text-sm text-muted-foreground">
-                      {v.unitValue} {v.unit}
+                    <div className="col-span-2">
+                      <VariantDetailsCell
+                        variant={{ id: v.id, unit: v.unit, unitValue: v.unitValue, price: v.price, mrp: v.mrp, stock: v.stock }}
+                        onSave={(id, unit, unitValue) => updateVariantDetails.mutate({ variantId: id, unit, unitValue })}
+                      />
                     </div>
-                    <div className="col-span-2 text-sm font-medium">₹{v.price}</div>
+                    <div className="col-span-2">
+                      <PriceCell
+                        variant={{ id: v.id, unit: v.unit, unitValue: v.unitValue, price: v.price, mrp: v.mrp, stock: v.stock }}
+                        onSave={(id, price) => updatePrice.mutate({ variantId: id, price })}
+                      />
+                    </div>
                     <div className="col-span-2">
                       <StockCell
                         variant={{ id: v.id, unit: v.unit, unitValue: v.unitValue, price: v.price, mrp: v.mrp, stock: v.stock }}

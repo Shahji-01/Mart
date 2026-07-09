@@ -94,11 +94,11 @@ export default function AdminProducts() {
         id: editing.id,
         data: {
           name: form.name,
-          description: form.description || undefined,
-          imageUrl: form.imageUrl || undefined,
+          description: form.description || ("" as any),
+          imageUrl: form.imageUrl || ("" as any),
           categoryId: parseInt(form.categoryId),
           isFeatured: form.isFeatured,
-          tags: form.tags ? form.tags.split(",").map(t => t.trim()) : [],
+          tags: (form.tags ? form.tags.split(",").map(t => t.trim()) : []) as any,
         }
       }, {
         onSuccess: () => { invalidate(); toast({ title: "Product updated" }); setOpen(false); },
@@ -109,11 +109,11 @@ export default function AdminProducts() {
         data: {
           name: form.name,
           slug: form.slug || form.name.toLowerCase().replace(/\s+/g, "-"),
-          description: form.description || undefined,
-          imageUrl: form.imageUrl || undefined,
+          description: form.description || ("" as any),
+          imageUrl: form.imageUrl || ("" as any),
           categoryId: parseInt(form.categoryId),
           isFeatured: form.isFeatured,
-          tags: form.tags ? form.tags.split(",").map(t => t.trim()) : [],
+          tags: (form.tags ? form.tags.split(",").map(t => t.trim()) : []) as any,
           variants: variants.filter(v => v.price).map(v => ({
             id: 0, unit: v.unit, unitValue: v.unitValue,
             price: parseFloat(v.price), mrp: parseFloat(v.mrp || v.price),
