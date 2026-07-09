@@ -44,12 +44,12 @@ export default function AdminCategories() {
   function handleSave() {
     if (!form.name || !form.slug) return;
     if (editing) {
-      updateCategory.mutate({ id: editing.id, data: { name: form.name, slug: form.slug, imageUrl: form.imageUrl } }, {
+      updateCategory.mutate({ id: editing.id, data: { name: form.name, slug: form.slug, imageUrl: form.imageUrl || undefined } }, {
         onSuccess: () => { invalidate(); toast({ title: "Category updated" }); setOpen(false); },
         onError: () => toast({ title: "Failed to update", variant: "destructive" }),
       });
     } else {
-      createCategory.mutate({ data: { name: form.name, slug: form.slug, imageUrl: form.imageUrl } }, {
+      createCategory.mutate({ data: { name: form.name, slug: form.slug, imageUrl: form.imageUrl || undefined } }, {
         onSuccess: () => { invalidate(); toast({ title: "Category created" }); setOpen(false); },
         onError: () => toast({ title: "Failed to create", variant: "destructive" }),
       });

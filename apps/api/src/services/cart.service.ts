@@ -96,9 +96,13 @@ export async function buildCart(userId: number, couponCode?: string | null, pinc
           subtotal: rawSubtotal,
           maxDiscount: coupon.maxDiscount ? parseFloat(coupon.maxDiscount) : null,
         });
+      } else {
+        appliedCoupon = null;
+        await db.update(cartSessionsTable).set({ couponCode: null }).where(eq(cartSessionsTable.userId, userId));
       }
     } else {
       appliedCoupon = null;
+      await db.update(cartSessionsTable).set({ couponCode: null }).where(eq(cartSessionsTable.userId, userId));
     }
   }
 
@@ -228,6 +232,14 @@ export class CartService {
         
       if (count >= coupon.maxUsagePerUser) {
         throw new Error(`You've already used this coupon ${coupon.maxUsagePerUser} time${coupon.maxUsagePerUser > 1 ? "s" : ""}`);
+      }
+    }
+    
+    if (coupon.minOrderValue) {
+      const minVal = parseFloat(coupon.minOrderValue);
+      const currentCart = await buildCart(userId);
+      if (currentCart.subtotal < minVal) {
+        throw new Error(`Add items worth ₹${minVal - currentCart.subtotal} more to use this coupon`);
       }
     }
     

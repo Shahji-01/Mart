@@ -42,7 +42,7 @@ export default function AdminCoupons() {
 
   const deleteCoupon = useMutation({
     mutationFn: async (id: number) => {
-      const res = await fetch(`/api/admin/coupons/${id}`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(`/api/coupons/${id}`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
       if (!res.ok) throw new Error("Failed to delete");
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: getGetCouponsQueryKey() }); toast({ title: "Coupon deleted" }); },
@@ -51,7 +51,7 @@ export default function AdminCoupons() {
 
   const toggleCoupon = useMutation({
     mutationFn: async ({ id, isActive }: { id: number; isActive: boolean }) => {
-      const res = await fetch(`/api/admin/coupons/${id}`, {
+      const res = await fetch(`/api/coupons/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ isActive }),
@@ -64,7 +64,7 @@ export default function AdminCoupons() {
 
   const updateCoupon = useMutation({
     mutationFn: async ({ id, data }: { id: number; data: object }) => {
-      const res = await fetch(`/api/admin/coupons/${id}`, {
+      const res = await fetch(`/api/coupons/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify(data),
@@ -133,46 +133,7 @@ export default function AdminCoupons() {
     setEditOpen(true);
   }
 
-  function CouponFormFields() {
-    return (
-      <div className="space-y-3">
-        <div>
-          <Label>Coupon Code</Label>
-          <Input value={form.code} onChange={e => setForm(f => ({ ...f, code: e.target.value.toUpperCase() }))} placeholder="SAVE20" className="mt-1 uppercase font-mono" />
-        </div>
-        <div>
-          <Label>Discount Type</Label>
-          <Select value={form.discountType} onValueChange={v => setForm(f => ({ ...f, discountType: v as "percentage" | "flat" }))}>
-            <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
-            <SelectContent>
-              <SelectItem value="percentage">Percentage (%)</SelectItem>
-              <SelectItem value="flat">Flat Amount (₹)</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div>
-          <Label>Discount Value</Label>
-          <Input value={form.discountValue} onChange={e => setForm(f => ({ ...f, discountValue: e.target.value }))} placeholder={form.discountType === "percentage" ? "20" : "50"} type="number" className="mt-1" />
-        </div>
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <Label>Min Order Value (₹)</Label>
-            <Input value={form.minOrderValue} onChange={e => setForm(f => ({ ...f, minOrderValue: e.target.value }))} placeholder="Optional" type="number" className="mt-1" />
-          </div>
-          {form.discountType === "percentage" && (
-            <div>
-              <Label>Max Discount (₹)</Label>
-              <Input value={form.maxDiscount} onChange={e => setForm(f => ({ ...f, maxDiscount: e.target.value }))} placeholder="Optional" type="number" className="mt-1" />
-            </div>
-          )}
-        </div>
-        <div>
-          <Label>Expiry Date (optional)</Label>
-          <Input value={form.expiresAt} onChange={e => setForm(f => ({ ...f, expiresAt: e.target.value }))} type="date" className="mt-1" />
-        </div>
-      </div>
-    );
-  }
+
 
   const isExpired = (coupon: NonNullable<typeof coupons>[number]) => {
     const exp = (coupon as typeof coupon & { expiresAt?: string | null }).expiresAt;
@@ -289,7 +250,42 @@ export default function AdminCoupons() {
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
         <DialogContent>
           <DialogHeader><DialogTitle>Create Coupon</DialogTitle></DialogHeader>
-          <CouponFormFields />
+          <div className="space-y-3">
+            <div>
+              <Label>Coupon Code</Label>
+              <Input value={form.code} onChange={e => setForm(f => ({ ...f, code: e.target.value.toUpperCase() }))} placeholder="SAVE20" className="mt-1 uppercase font-mono" />
+            </div>
+            <div>
+              <Label>Discount Type</Label>
+              <Select value={form.discountType} onValueChange={v => setForm(f => ({ ...f, discountType: v as "percentage" | "flat" }))}>
+                <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="percentage">Percentage (%)</SelectItem>
+                  <SelectItem value="flat">Flat Amount (₹)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label>Discount Value</Label>
+              <Input value={form.discountValue} onChange={e => setForm(f => ({ ...f, discountValue: e.target.value }))} placeholder={form.discountType === "percentage" ? "20" : "50"} type="number" className="mt-1" />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label>Min Order Value (₹)</Label>
+                <Input value={form.minOrderValue} onChange={e => setForm(f => ({ ...f, minOrderValue: e.target.value }))} placeholder="Optional" type="number" className="mt-1" />
+              </div>
+              {form.discountType === "percentage" && (
+                <div>
+                  <Label>Max Discount (₹)</Label>
+                  <Input value={form.maxDiscount} onChange={e => setForm(f => ({ ...f, maxDiscount: e.target.value }))} placeholder="Optional" type="number" className="mt-1" />
+                </div>
+              )}
+            </div>
+            <div>
+              <Label>Expiry Date (optional)</Label>
+              <Input value={form.expiresAt} onChange={e => setForm(f => ({ ...f, expiresAt: e.target.value }))} type="date" className="mt-1" />
+            </div>
+          </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setCreateOpen(false)}>Cancel</Button>
             <Button className="bg-primary" onClick={handleCreate} disabled={createCoupon.isPending || !form.code || !form.discountValue} data-testid="button-create-coupon">
@@ -303,7 +299,42 @@ export default function AdminCoupons() {
       <Dialog open={editOpen} onOpenChange={v => { setEditOpen(v); if (!v) { setEditingId(null); setForm(emptyForm); } }}>
         <DialogContent>
           <DialogHeader><DialogTitle>Edit Coupon</DialogTitle></DialogHeader>
-          <CouponFormFields />
+          <div className="space-y-3">
+            <div>
+              <Label>Coupon Code</Label>
+              <Input value={form.code} onChange={e => setForm(f => ({ ...f, code: e.target.value.toUpperCase() }))} placeholder="SAVE20" className="mt-1 uppercase font-mono" />
+            </div>
+            <div>
+              <Label>Discount Type</Label>
+              <Select value={form.discountType} onValueChange={v => setForm(f => ({ ...f, discountType: v as "percentage" | "flat" }))}>
+                <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="percentage">Percentage (%)</SelectItem>
+                  <SelectItem value="flat">Flat Amount (₹)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label>Discount Value</Label>
+              <Input value={form.discountValue} onChange={e => setForm(f => ({ ...f, discountValue: e.target.value }))} placeholder={form.discountType === "percentage" ? "20" : "50"} type="number" className="mt-1" />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label>Min Order Value (₹)</Label>
+                <Input value={form.minOrderValue} onChange={e => setForm(f => ({ ...f, minOrderValue: e.target.value }))} placeholder="Optional" type="number" className="mt-1" />
+              </div>
+              {form.discountType === "percentage" && (
+                <div>
+                  <Label>Max Discount (₹)</Label>
+                  <Input value={form.maxDiscount} onChange={e => setForm(f => ({ ...f, maxDiscount: e.target.value }))} placeholder="Optional" type="number" className="mt-1" />
+                </div>
+              )}
+            </div>
+            <div>
+              <Label>Expiry Date (optional)</Label>
+              <Input value={form.expiresAt} onChange={e => setForm(f => ({ ...f, expiresAt: e.target.value }))} type="date" className="mt-1" />
+            </div>
+          </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setEditOpen(false)}>Cancel</Button>
             <Button className="bg-primary" onClick={handleEdit} disabled={updateCoupon.isPending || !form.code || !form.discountValue}>

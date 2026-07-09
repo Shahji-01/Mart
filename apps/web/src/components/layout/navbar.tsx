@@ -176,10 +176,10 @@ export function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 bg-primary shadow-sm">
+    <header className="sticky top-0 z-50 bg-primary dark:bg-card dark:border-b shadow-sm transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4">
         {/* Top Header - Location & Quick Actions */}
-        <div className="flex items-center justify-between h-10 border-b border-white/10 hidden md:flex">
+        <div className="flex items-center justify-between h-10 border-b border-white/10 dark:border-border hidden md:flex">
           <LocationPicker variant="desktop" />
           <div className="flex items-center gap-4 text-xs text-white/80">
             <Link href="/loyalty" className="hover:text-white transition-colors">NTC Coins</Link>
@@ -211,7 +211,7 @@ export function Navbar() {
               placeholder={`Search "${SEARCH_SUGGESTIONS[phIdx]}"`}
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="pl-10 bg-white text-black border-0 focus-visible:ring-2 focus-visible:ring-yellow-400 h-11 rounded-xl text-base shadow-inner transition-all w-full"
+              className="pl-10 bg-white dark:bg-muted text-black dark:text-foreground border-0 focus-visible:ring-2 focus-visible:ring-yellow-400 h-11 rounded-xl text-base shadow-inner transition-all w-full"
             />
           </form>
 
@@ -223,7 +223,7 @@ export function Navbar() {
                 data-testid="button-cart" 
                 variant="secondary" 
                 aria-label="Open cart"
-                className="bg-green-800/40 hover:bg-green-800/60 text-white border-0 h-11 px-4 rounded-xl flex items-center gap-2.5"
+                className="bg-green-800/40 hover:bg-green-800/60 dark:bg-primary/20 dark:hover:bg-primary/30 text-white dark:text-primary-foreground border-0 h-11 px-4 rounded-xl flex items-center gap-2.5"
               >
                 <div className="relative">
                   <ShoppingBag className="h-5 w-5" />

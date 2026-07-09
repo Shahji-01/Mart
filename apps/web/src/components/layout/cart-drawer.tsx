@@ -129,8 +129,8 @@ export function CartDrawer() {
                         </button>
                         <div className="flex items-center bg-primary rounded-lg shadow-sm h-7 w-20">
                           <button 
-                            disabled={loadingItems[item.id]}
-                            onClick={() => handleUpdateQuantity(item, Math.max(0, item.quantity - 1))}
+                            disabled={loadingId === item.variantId}
+                            onClick={() => handleUpdate(item.variantId, Math.max(0, item.quantity - 1))}
                             className="w-7 h-full flex items-center justify-center text-primary-foreground hover:bg-accent/20 transition-colors disabled:opacity-50"
                           >
                             <Minus className="h-3 w-3" />
@@ -139,8 +139,8 @@ export function CartDrawer() {
                             {loadingId === item.variantId ? "..." : item.quantity}
                           </span>
                           <button 
-                            disabled={loadingItems[item.id]}
-                            onClick={() => handleUpdateQuantity(item, item.quantity + 1)}
+                            disabled={loadingId === item.variantId}
+                            onClick={() => handleUpdate(item.variantId, item.quantity + 1)}
                             className="w-7 h-full flex items-center justify-center text-primary-foreground hover:bg-accent/20 transition-colors disabled:opacity-50"
                           >
                             <Plus className="h-3 w-3" />

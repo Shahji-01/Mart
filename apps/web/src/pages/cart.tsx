@@ -184,7 +184,10 @@ export default function CartPage() {
                     disabled={applyCoupon.isPending || !couponInput}
                     onClick={() => applyCoupon.mutate({ data: { code: couponInput } }, {
                       onSuccess: (c) => { invalidate(); toast({ title: `Coupon applied! Saved ₹${c.discount.toFixed(0)}` }); },
-                      onError: () => toast({ title: "Invalid coupon", variant: "destructive" }),
+                      onError: (error: any) => {
+                        const message = error.response?.data?.error || error.response?.error || error.message || "Invalid coupon";
+                        toast({ title: message, variant: "destructive" });
+                      },
                     })}
                     data-testid="button-apply-coupon"
                   >Apply</Button>
@@ -204,19 +207,28 @@ export default function CartPage() {
                   <div className="mt-3 space-y-2">
                     <p className="text-xs text-muted-foreground font-medium flex items-center gap-1"><Ticket className="h-3 w-3" /> Available coupons</p>
                     <div className="flex flex-col gap-2">
-                      {suggestions.map(s => (
-                        <button
-                          key={s.code}
-                          type="button"
-                          onClick={() => {
-                            setCouponInput(s.code);
-                            applyCoupon.mutate({ data: { code: s.code } }, {
-                              onSuccess: (c) => { invalidate(); toast({ title: `Coupon applied! Saved ₹${c.discount.toFixed(0)}` }); },
-                              onError: () => toast({ title: "Coupon not applicable", variant: "destructive" }),
-                            });
-                          }}
-                          className="w-full text-left flex items-center gap-3 border border-dashed border-accent/60 rounded-lg px-3 py-2 hover:bg-accent/5 transition-colors group"
-                        >
+                      {suggestions.map(s => {
+                        const isEligible = (cart?.subtotal ?? 0) >= s.minOrderValue;
+                        return (
+                          <button
+                            key={s.code}
+                            type="button"
+                            onClick={() => {
+                              if (!isEligible) {
+                                toast({ title: `Add items worth ₹${(s.minOrderValue - (cart?.subtotal ?? 0)).toFixed(0)} more to use this coupon`, variant: "destructive" });
+                                return;
+                              }
+                              setCouponInput(s.code);
+                              applyCoupon.mutate({ data: { code: s.code } }, {
+                                onSuccess: (c) => { invalidate(); toast({ title: `Coupon applied! Saved ₹${c.discount.toFixed(0)}` }); },
+                                onError: (error: any) => {
+                                  const message = error.response?.data?.error || error.response?.error || error.message || "Coupon not applicable";
+                                  toast({ title: message, variant: "destructive" });
+                                },
+                              });
+                            }}
+                            className={`w-full text-left flex items-center gap-3 border border-dashed rounded-lg px-3 py-2 transition-colors group ${isEligible ? 'border-accent/60 hover:bg-accent/5 cursor-pointer' : 'border-muted opacity-60 cursor-not-allowed'}`}
+                          >
                           <span className="bg-accent/10 text-accent font-mono font-bold text-xs px-2 py-0.5 rounded group-hover:bg-accent group-hover:text-white transition-colors">{s.code}</span>
                           <div className="flex-1 min-w-0">
                             <p className="text-xs font-medium truncate">{s.description}</p>
@@ -225,8 +237,9 @@ export default function CartPage() {
                           <span className="text-xs font-bold text-accent flex-shrink-0">
                             {s.discountType === "percentage" ? `${s.discountValue}% OFF` : `₹${s.discountValue} OFF`}
                           </span>
-                        </button>
-                      ))}
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
                 )}

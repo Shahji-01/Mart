@@ -65,11 +65,7 @@ export class CartController {
       const result = await cartService.applyCoupon(req.user.userId, code);
       res.json(result);
     } catch (err: any) {
-      if (err.message.includes("Invalid") || err.message.includes("expired") || err.message.includes("used this coupon")) {
-        res.status(400).json({ error: err.message });
-      } else {
-        next(err);
-      }
+      res.status(400).json({ error: err.message || "Failed to apply coupon" });
     }
   }
 
