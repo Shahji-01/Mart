@@ -91,7 +91,7 @@ export default function CustomerDetail() {
     } finally { setSaving(false); }
   }
 
-  if (loading || !user) return <div className="min-h-screen bg-background"><Navbar /><div className="max-w-4xl mx-auto px-4 py-6 flex gap-6"><AdminSidebar /><div className="flex-1"><Skeleton className="h-64" /></div></div></div>;
+  if (loading || !user) return <div className="min-h-screen bg-background"><Navbar /><div className="max-w-4xl mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6"><AdminSidebar /><div className="flex-1"><Skeleton className="h-64" /></div></div></div>;
   if (user.id === undefined) return <div className="text-center py-20">Customer not found</div>;
 
   const totalSpent = orders.filter(o => o.status !== "cancelled").reduce((s, o) => s + o.total, 0);
@@ -100,7 +100,7 @@ export default function CustomerDetail() {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="max-w-7xl mx-auto px-4 py-6 flex gap-6">
+      <div className="max-w-7xl mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6">
         <AdminSidebar />
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-3 mb-6">

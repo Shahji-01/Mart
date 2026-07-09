@@ -13,6 +13,8 @@ import { LocationPicker } from "./location-picker";
 import { useUIStore } from "@/lib/ui-store";
 import { enablePush, getPushPermission, pushSupported } from "@/lib/push";
 import { useTheme } from "next-themes";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
+import { Switch } from "@/components/ui/switch";
 
 interface Notification { id: number; title: string; message: string; type: string; isRead: boolean; createdAt: string; }
 
@@ -189,7 +191,124 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-3 md:gap-6 h-16">
-          <Link href="/" className="flex-shrink-0">
+          {/* Mobile Hamburger Menu */}
+          <div className="md:hidden">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 -ml-2">
+                  <Menu className="h-6 w-6" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-[300px] sm:w-[350px] p-0 flex flex-col">
+                <SheetHeader className="p-4 border-b text-left bg-primary text-white">
+                  <SheetTitle className="text-white">
+                    <div className="flex items-center gap-2">
+                      <NTCLogoIcon size={24} />
+                      <span className="font-black text-lg">NTC Mart</span>
+                    </div>
+                  </SheetTitle>
+                </SheetHeader>
+                <div className="flex-1 overflow-y-auto py-4">
+                  <div className="px-4 pb-4 border-b">
+                    {user ? (
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-lg font-bold text-primary">
+                          {user.name.charAt(0).toUpperCase()}
+                        </div>
+                        <div>
+                          <p className="font-semibold">{user.name}</p>
+                          <p className="text-xs text-muted-foreground">{user.email}</p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        <p className="text-sm font-medium">Log in to unlock special features</p>
+                        <SheetClose asChild>
+                          <Link href="/login">
+                            <Button className="w-full">Login / Sign Up</Button>
+                          </Link>
+                        </SheetClose>
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="p-2 space-y-1">
+                    {user && user.role === "admin" && (
+                      <SheetClose asChild>
+                        <Link href="/admin">
+                          <Button variant="ghost" className="w-full justify-start gap-3 px-3 py-6 h-auto">
+                            <LayoutDashboard className="h-5 w-5 text-primary" />
+                            <div className="flex flex-col items-start">
+                              <span className="font-medium">Admin Dashboard</span>
+                              <span className="text-xs text-muted-foreground font-normal">Manage store</span>
+                            </div>
+                          </Button>
+                        </Link>
+                      </SheetClose>
+                    )}
+                    <SheetClose asChild>
+                      <Link href="/orders">
+                        <Button variant="ghost" className="w-full justify-start gap-3 px-3 py-6 h-auto">
+                          <Package className="h-5 w-5 text-primary" />
+                          <div className="flex flex-col items-start">
+                            <span className="font-medium">My Orders</span>
+                            <span className="text-xs text-muted-foreground font-normal">Track your deliveries</span>
+                          </div>
+                        </Button>
+                      </Link>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <Link href="/wishlist">
+                        <Button variant="ghost" className="w-full justify-start gap-3 px-3 py-6 h-auto">
+                          <Heart className="h-5 w-5 text-primary" />
+                          <div className="flex flex-col items-start">
+                            <span className="font-medium">My Wishlist</span>
+                            <span className="text-xs text-muted-foreground font-normal">Your saved items</span>
+                          </div>
+                        </Button>
+                      </Link>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <Link href="/loyalty">
+                        <Button variant="ghost" className="w-full justify-start gap-3 px-3 py-6 h-auto">
+                          <Star className="h-5 w-5 text-primary" />
+                          <div className="flex flex-col items-start">
+                            <span className="font-medium">NTC Coins</span>
+                            <span className="text-xs text-muted-foreground font-normal">View your rewards</span>
+                          </div>
+                        </Button>
+                      </Link>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <Link href="/category/all">
+                        <Button variant="ghost" className="w-full justify-start gap-3 px-3 py-6 h-auto">
+                          <ShoppingBag className="h-5 w-5 text-primary" />
+                          <div className="flex flex-col items-start">
+                            <span className="font-medium">Shop by Category</span>
+                            <span className="text-xs text-muted-foreground font-normal">Browse all products</span>
+                          </div>
+                        </Button>
+                      </Link>
+                    </SheetClose>
+                  </div>
+                </div>
+                
+                <div className="p-4 border-t space-y-3">
+                  <div className="flex items-center justify-between px-2">
+                    <span className="text-sm font-medium">Dark Mode</span>
+                    <Switch checked={theme === "dark"} onCheckedChange={(c) => setTheme(c ? "dark" : "light")} />
+                  </div>
+                  {user && (
+                    <Button variant="outline" className="w-full gap-2 text-destructive" onClick={handleLogout}>
+                      <LogOut className="h-4 w-4" /> Logout
+                    </Button>
+                  )}
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
+
+          <Link href="/" className="flex-shrink-0 hidden sm:flex">
             <div className="flex items-center gap-2">
               <NTCLogoIcon size={32} />
               <div className="hidden sm:flex flex-col">
@@ -244,12 +363,27 @@ export function Navbar() {
               </Button>
             </div>
 
-            {/* Mobile Search Button */}
-            <Link href="/search">
-              <Button variant="ghost" size="icon" className="md:hidden text-white hover:bg-white/20">
-                <Search className="h-5 w-5" />
+            {/* Mobile Search & Cart Buttons */}
+            <div className="flex items-center md:hidden">
+              <Link href="/search">
+                <Button variant="ghost" size="icon" className="text-white hover:bg-white/20">
+                  <Search className="h-5 w-5" />
+                </Button>
+              </Link>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="text-white hover:bg-white/20 relative"
+                onClick={openCart}
+              >
+                <ShoppingBag className="h-5 w-5" />
+                {cartCount > 0 && (
+                  <Badge className="absolute top-0 right-0 h-4 w-4 p-0 flex items-center justify-center text-[10px] bg-yellow-400 text-black border-0">
+                    {cartCount}
+                  </Badge>
+                )}
               </Button>
-            </Link>
+            </div>
 
             {user ? (
               <div className="flex items-center gap-1">

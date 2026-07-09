@@ -140,7 +140,7 @@ export default function AdminProducts() {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="max-w-7xl mx-auto px-4 py-6 flex gap-6">
+      <div className="max-w-7xl mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6">
         <AdminSidebar />
         <div className="flex-1 min-w-0 space-y-4">
           <div className="flex items-center justify-between flex-wrap gap-3">
@@ -172,7 +172,7 @@ export default function AdminProducts() {
               <div className="p-4 space-y-3">{[1,2,3,4,5].map(i => <Skeleton key={i} className="h-14 w-full" />)}</div>
             ) : (
               <div className="overflow-x-auto">
-                <table className="w-full text-sm">
+                <table className="w-full min-w-[800px] text-sm">
                   <thead>
                     <tr className="border-b bg-muted/30">
                       <th className="text-left p-3 text-xs text-muted-foreground font-medium">Product</th>

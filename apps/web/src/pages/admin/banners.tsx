@@ -96,7 +96,7 @@ export default function AdminBanners() {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main className="max-w-7xl mx-auto px-4 py-6 flex gap-6">
+      <main className="max-w-7xl mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6">
         <AdminSidebar />
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-6">

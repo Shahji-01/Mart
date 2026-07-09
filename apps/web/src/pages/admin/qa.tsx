@@ -141,7 +141,7 @@ export default function AdminQA() {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="max-w-7xl mx-auto px-4 py-6 flex gap-6">
+      <div className="max-w-7xl mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6">
         <AdminSidebar />
         <div className="flex-1 min-w-0 space-y-4">
           <div>

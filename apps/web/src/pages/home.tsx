@@ -334,7 +334,7 @@ export default function HomePage() {
           <CategoryGrid />
         </section>
 
-        <section className="grid grid-cols-3 gap-3">
+        <section className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {[
             { icon: Truck, title: "Free Delivery", desc: "On orders above ₹499", color: "text-green-600", bg: "bg-green-50", border: "border-green-100" },
             { icon: Shield, title: "100% Fresh", desc: "Farm fresh guarantee", color: "text-blue-600", bg: "bg-blue-50", border: "border-blue-100" },
@@ -378,7 +378,7 @@ export default function HomePage() {
 
         <RecentlyViewed />
 
-        <section className="bg-gradient-to-r from-primary to-primary/80 rounded-2xl p-8 text-white flex items-center justify-between shadow-lg">
+        <section className="bg-gradient-to-r from-primary to-primary/80 rounded-2xl p-8 text-white flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-lg">
           <div>
             <h2 className="text-2xl font-bold">Fresh Vegetables & Fruits</h2>
             <p className="text-white/80 mt-1">Sourced daily from local farms in Rajasthan</p>
@@ -396,7 +396,7 @@ export default function HomePage() {
         </section>
 
         <section className="bg-gradient-to-r from-accent/90 to-accent rounded-2xl p-6 text-white shadow-lg">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <Tag className="h-5 w-5" />

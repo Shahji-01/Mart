@@ -210,7 +210,7 @@ export default function AdminInventory() {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main className="max-w-7xl mx-auto px-4 py-6 flex gap-6">
+      <main className="max-w-7xl mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6">
         <AdminSidebar />
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-3 mb-6">
@@ -223,7 +223,7 @@ export default function AdminInventory() {
             </div>
           </div>
 
-          <div className="grid grid-cols-4 gap-4 mb-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             {[
               { label: "Total SKUs", value: allVariants.length, color: "text-foreground" },
               { label: "Total Stock", value: totalItems, color: "text-green-700" },
@@ -284,7 +284,8 @@ export default function AdminInventory() {
                 <p>No products match your filter</p>
               </div>
             ) : (
-              <div className="divide-y">
+              <div className="overflow-x-auto">
+                <div className="divide-y min-w-[800px]">
                 <div className="grid grid-cols-12 gap-4 px-4 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide bg-muted/30">
                   <div className="col-span-4">Product</div>
                   <div className="col-span-2">Category</div>
@@ -325,6 +326,7 @@ export default function AdminInventory() {
                     </div>
                   </div>
                 ))}
+                </div>
               </div>
             )}
           </div>
