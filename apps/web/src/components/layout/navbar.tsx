@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Search, User, Menu, X, LogOut, ChevronDown, ShoppingBag, Bell, LayoutDashboard, Heart, Package, Moon, Sun } from "lucide-react";
+import { Search, User, Menu, X, LogOut, ChevronDown, ShoppingBag, Bell, LayoutDashboard, Heart, Package, Moon, Sun, Star } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
