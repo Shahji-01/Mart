@@ -74,7 +74,7 @@ export class FlashSalesService {
   }
 
   async updateFlashSale(id: number, data: any) {
-    const { label, discountType, discountValue, startsAt, endsAt, isActive } = data;
+    const { label, discountType, discountValue, startsAt, endsAt, isActive, productId } = data;
     const updates: Record<string, unknown> = {};
     if (label !== undefined) updates.label = label;
     if (discountType !== undefined) updates.discountType = discountType;
@@ -82,6 +82,7 @@ export class FlashSalesService {
     if (startsAt !== undefined) updates.startsAt = new Date(startsAt);
     if (endsAt !== undefined) updates.endsAt = new Date(endsAt);
     if (isActive !== undefined) updates.isActive = isActive;
+    if (productId !== undefined) updates.productId = productId;
     
     const [sale] = await db.update(flashSalesTable).set(updates).where(eq(flashSalesTable.id, id)).returning();
     if (!sale) return null;

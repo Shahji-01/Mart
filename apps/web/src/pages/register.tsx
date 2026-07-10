@@ -36,7 +36,7 @@ export default function RegisterPage() {
     registerMutation.mutate({ data }, {
       onSuccess: (res) => {
         authStore.setToken(res.token);
-        toast({ title: `Welcome to NTC Mart, ${res.user.name}!` });
+        toast({ title: `Welcome to Shankeshwar Traders, ${res.user.name}!` });
         setLocation("/");
       },
       onError: (err: unknown) => {
@@ -53,8 +53,8 @@ export default function RegisterPage() {
           <Link href="/" className="inline-flex flex-col items-center gap-3">
             <NTCLogoIcon size={56} />
             <div>
-              <h1 className="text-3xl font-bold">NTC Mart</h1>
-              <p className="text-muted-foreground mt-1 text-sm">Nageshwara Trading Company, Banswara</p>
+              <h1 className="text-3xl font-bold">Shankeshwar Traders</h1>
+              <p className="text-muted-foreground mt-1 text-sm">Shankeshwar Traders, Banswara</p>
             </div>
           </Link>
         </div>

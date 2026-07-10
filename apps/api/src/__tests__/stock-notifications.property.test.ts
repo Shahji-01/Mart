@@ -28,7 +28,7 @@ describe.skipIf(!HAS_DB)("Back-in-stock subscriptions (Property 19)", () => {
     const { usersTable, categoriesTable, productsTable, productVariantsTable } = database;
     const [user] = await db.insert(usersTable).values({
       name: "Stock Notify Test",
-      email: `stock_notify_${tag}@ntcmarket.in`,
+      email: `stock_notify_${tag}@shankeshwartraders.in`,
       phone: `9${tag.toString().slice(-9)}`,
       passwordHash: "x",
       role: "customer" as const,
@@ -53,7 +53,7 @@ describe.skipIf(!HAS_DB)("Back-in-stock subscriptions (Property 19)", () => {
         const { usersTable } = await import("@workspace/database");
         const [u] = await db.insert(usersTable).values({
           name: "Notify Run",
-          email: `notify_run_${tag}_${Math.random().toString(36).slice(2)}@ntcmarket.in`,
+          email: `notify_run_${tag}_${Math.random().toString(36).slice(2)}@shankeshwartraders.in`,
           phone: "9000000000",
           passwordHash: "x",
           role: "customer" as const,

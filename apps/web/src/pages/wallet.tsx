@@ -89,7 +89,7 @@ export default function WalletPage() {
           <div className="flex items-center gap-3 mb-3">
             <Wallet className="h-7 w-7" />
             <div>
-              <p className="text-sm opacity-80">NTC Wallet Balance</p>
+              <p className="text-sm opacity-80">ST Wallet Balance</p>
               <h1 className="text-3xl font-bold">₹{isLoading ? "..." : isError ? "—" : (data?.balance ?? 0).toFixed(2)}</h1>
             </div>
           </div>

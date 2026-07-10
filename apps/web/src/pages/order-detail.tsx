@@ -111,7 +111,7 @@ function OrderChat({ orderId }: { orderId: number }) {
                 <div className={`max-w-[80%] rounded-2xl px-3 py-2 text-sm ${m.sender === "customer" ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
                   <p>{m.message}</p>
                   <p className={`text-[10px] mt-0.5 ${m.sender === "customer" ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
-                    {m.sender === "admin" ? "NTC Mart" : "You"} · {new Date(m.createdAt).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}
+                    {m.sender === "admin" ? "Shankeshwar Traders" : "You"} · {new Date(m.createdAt).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}
                   </p>
                 </div>
               </div>

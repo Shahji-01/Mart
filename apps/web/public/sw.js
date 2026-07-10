@@ -38,11 +38,11 @@ self.addEventListener("fetch", (event) => {
 self.addEventListener("push", (event) => {
   let data = {};
   try { data = event.data ? event.data.json() : {}; } catch { data = {}; }
-  const title = data.title || "NTC Mart";
+  const title = data.title || "Shankeshwar Traders";
   const options = {
     body: data.body || "",
-    icon: "/ntcmart-logo.png",
-    badge: "/ntcmart-logo.png",
+    icon: "/shankeshwar-logo.png",
+    badge: "/shankeshwar-logo.png",
     data: { url: data.url || "/" },
   };
   event.waitUntil(self.registration.showNotification(title, options));

@@ -32,15 +32,15 @@ class EmailService {
 
     try {
       const info = await this.transporter.sendMail({
-        from: '"NTC Mart" <noreply@ntcmart.in>',
+        from: '"Shankeshwar Traders" <noreply@shankeshwartraders.in>',
         to,
-        subject: "Welcome to NTC Mart! 🎉",
+        subject: "Welcome to Shankeshwar Traders! 🎉",
         html: `
           <div style="font-family: sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
             <h2 style="color: #2563eb;">Welcome, ${name}!</h2>
-            <p>Thank you for joining NTC Mart. We are thrilled to have you here.</p>
+            <p>Thank you for joining Shankeshwar Traders. We are thrilled to have you here.</p>
             <p>Shop for fresh groceries, daily essentials, and organic produce with fast delivery to your doorstep.</p>
-            <a href="https://ntcmart.in" style="display: inline-block; padding: 10px 20px; background-color: #2563eb; color: white; text-decoration: none; border-radius: 5px; margin-top: 10px;">Shop Now</a>
+            <a href="https://shankeshwartraders.in" style="display: inline-block; padding: 10px 20px; background-color: #2563eb; color: white; text-decoration: none; border-radius: 5px; margin-top: 10px;">Shop Now</a>
           </div>
         `,
       });
@@ -56,7 +56,7 @@ class EmailService {
 
     try {
       const info = await this.transporter.sendMail({
-        from: '"NTC Mart" <noreply@ntcmart.in>',
+        from: '"Shankeshwar Traders" <noreply@shankeshwartraders.in>',
         to,
         subject: `Order Confirmation - #${orderId}`,
         html: `

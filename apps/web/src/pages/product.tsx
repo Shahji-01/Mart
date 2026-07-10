@@ -139,7 +139,7 @@ function QASection({ productId }: { productId: number }) {
                       </div>
                       <div className="bg-green-50 rounded-lg p-3 flex-1">
                         <p className="text-sm text-green-900">{qa.answer}</p>
-                        <p className="text-xs text-green-600 mt-1 font-medium">NTC Mart Team</p>
+                        <p className="text-xs text-green-600 mt-1 font-medium">Shankeshwar Traders Team</p>
                       </div>
                     </div>
                   )}
@@ -366,7 +366,7 @@ export default function ProductPage() {
     "@type": "Product",
     name: product.name,
     image: product.imageUrl ? [product.imageUrl] : undefined,
-    description: product.description || `Buy ${product.name} at NTC Mart.`,
+    description: product.description || `Buy ${product.name} at Shankeshwar Traders.`,
     category: product.categoryName,
     offers: {
       "@type": "Offer",
@@ -392,7 +392,7 @@ export default function ProductPage() {
       {product && (
         <SEO 
           title={product.name}
-          description={product.description || `Buy ${product.name} at NTC Mart.`}
+          description={product.description || `Buy ${product.name} at Shankeshwar Traders.`}
           image={product.imageUrl}
           jsonLd={productJsonLd}
         />

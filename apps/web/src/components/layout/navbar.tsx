@@ -184,7 +184,7 @@ export function Navbar() {
         <div className="flex items-center justify-between h-10 border-b border-white/10 dark:border-border hidden md:flex">
           <LocationPicker variant="desktop" />
           <div className="flex items-center gap-4 text-xs text-white/80">
-            <Link href="/loyalty" className="hover:text-white transition-colors">NTC Coins</Link>
+            <Link href="/loyalty" className="hover:text-white transition-colors">ST Coins</Link>
             <Link href="/referral" className="hover:text-white transition-colors">Refer & Earn</Link>
             <a href="tel:+919876543210" className="hover:text-white transition-colors">Help</a>
           </div>
@@ -204,7 +204,7 @@ export function Navbar() {
                   <SheetTitle className="text-white">
                     <div className="flex items-center gap-2">
                       <NTCLogoIcon size={24} />
-                      <span className="font-black text-lg">NTC Mart</span>
+                      <span className="font-black text-lg">Shankeshwar Traders</span>
                     </div>
                   </SheetTitle>
                 </SheetHeader>
@@ -273,7 +273,7 @@ export function Navbar() {
                         <Button variant="ghost" className="w-full justify-start gap-3 px-3 py-6 h-auto">
                           <Star className="h-5 w-5 text-primary" />
                           <div className="flex flex-col items-start">
-                            <span className="font-medium">NTC Coins</span>
+                            <span className="font-medium">ST Coins</span>
                             <span className="text-xs text-muted-foreground font-normal">View your rewards</span>
                           </div>
                         </Button>
@@ -312,7 +312,7 @@ export function Navbar() {
             <div className="flex items-center gap-2">
               <NTCLogoIcon size={32} />
               <div className="hidden sm:flex flex-col">
-                <span className="text-white font-black text-xl leading-none tracking-tight">NTC Mart</span>
+                <span className="text-white font-black text-xl leading-none tracking-tight">Shankeshwar Traders</span>
                 <span className="text-yellow-400 font-bold text-[9px] leading-tight uppercase tracking-wider">Minutes Delivery</span>
               </div>
             </div>

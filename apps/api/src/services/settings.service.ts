@@ -2,11 +2,11 @@ import { db, storeSettingsTable } from "@workspace/database";
 import { eq } from "drizzle-orm";
 
 const DEFAULT_SETTINGS = {
-  storeName: "NTC Mart",
-  fullName: "Nageshwara Trading Company",
+  storeName: "Shankeshwar Traders",
+  fullName: "Shankeshwar Traders",
   gstin: "",
   phone: "+91 98765 43210",
-  email: "contact@ntcmart.in",
+  email: "contact@shankeshwartraders.in",
   address: "Banswara, Rajasthan – 327001",
   openingHours: "Mon – Sun: 7:00 AM – 9:00 PM",
   deliveryCutoff: "5:00 PM",

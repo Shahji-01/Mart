@@ -43,14 +43,14 @@ export default function InvoicePage() {
           <div className="flex justify-between items-start mb-8">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <img src="/ntcmart-logo.png" alt="NTC Mart" className="w-9 h-9 object-contain rounded-lg" />
+                <img src="/shankeshwar-logo.png" alt="Shankeshwar Traders" className="w-9 h-9 object-contain rounded-lg" />
                 <div>
-                  <span className="text-xl font-bold block leading-tight">NTC Mart</span>
-                  <span className="text-xs text-gray-400">Nageshwara Trading Company</span>
+                  <span className="text-xl font-bold block leading-tight">Shankeshwar Traders</span>
+                  <span className="text-xs text-gray-400">Shankeshwar Traders</span>
                 </div>
               </div>
               <p className="text-sm text-gray-500">Banswara, Rajasthan – 327001</p>
-              <p className="text-sm text-gray-500">contact@ntcmart.in | GSTIN: 08XXXXX0000X1ZX</p>
+              <p className="text-sm text-gray-500">contact@shankeshwartraders.in | GSTIN: 08XXXXX0000X1ZX</p>
             </div>
             <div className="text-right">
               <p className="text-2xl font-bold text-primary">INVOICE</p>
@@ -111,8 +111,8 @@ export default function InvoicePage() {
 
           {/* Footer */}
           <div className="mt-8 text-center text-xs text-gray-400 border-t border-gray-100 pt-4">
-            <p>Thank you for shopping at NTC Mart!</p>
-            <p>For queries: contact@ntcmart.in | Nageshwara Trading Company, Banswara, Rajasthan – 327001</p>
+            <p>Thank you for shopping at Shankeshwar Traders!</p>
+            <p>For queries: contact@shankeshwartraders.in | Shankeshwar Traders, Banswara, Rajasthan – 327001</p>
           </div>
         </div>
       </div>

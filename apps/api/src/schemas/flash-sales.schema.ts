@@ -35,5 +35,6 @@ export const updateFlashSaleSchema = z.object({
     startsAt: z.string().optional(),
     endsAt: z.string().optional(),
     isActive: z.boolean().optional(),
+    productId: z.number().int().positive().optional(),
   }),
 });

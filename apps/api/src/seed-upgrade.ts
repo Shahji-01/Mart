@@ -3,7 +3,7 @@ import { db, usersTable, categoriesTable, productsTable, productVariantsTable, b
 import { eq, sql } from "drizzle-orm";
 
 async function seedUpgrade() {
-  console.log("🌱 Running NTC Market seed upgrade...");
+  console.log("🌱 Running Shankeshwar Traders seed upgrade...");
 
   // Ensure banners exist
   const bannerCount = await db.select({ c: sql<number>`count(*)::int` }).from(bannersTable);

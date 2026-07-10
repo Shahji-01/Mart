@@ -311,8 +311,8 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-background">
       <SEO 
-        title="NTC Mart - Fresh Groceries Delivered" 
-        description="Shop for fresh groceries, daily essentials, and organic produce online at NTC Mart. Fast delivery to your doorstep."
+        title="Shankeshwar Traders - Fresh Groceries Delivered" 
+        description="Shop for fresh groceries, daily essentials, and organic produce online at Shankeshwar Traders. Fast delivery to your doorstep."
       />
       <Navbar />
       <main className="max-w-7xl mx-auto px-4 py-6 space-y-8">
@@ -402,7 +402,7 @@ export default function HomePage() {
                 <Tag className="h-5 w-5" />
                 <span className="font-bold text-lg">Refer & Save</span>
               </div>
-              <p className="text-white/85 text-sm">Invite friends to NTC Mart and earn ₹50 wallet credit for every successful referral.</p>
+              <p className="text-white/85 text-sm">Invite friends to Shankeshwar Traders and earn ₹50 wallet credit for every successful referral.</p>
             </div>
             <Link href="/referral">
               <Button className="bg-white text-accent hover:bg-white/90 font-semibold flex-shrink-0 ml-4">

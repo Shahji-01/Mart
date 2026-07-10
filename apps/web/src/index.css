@@ -57,7 +57,7 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-/* NTC Market — Green & Saffron palette */
+/* Shankeshwar Traders — Green & Saffron palette */
 :root {
   --button-outline: rgba(0,0,0,.10);
   --badge-outline: rgba(0,0,0,.05);

@@ -76,8 +76,8 @@ export default function ForgotPasswordPage() {
           <Link href="/" className="inline-flex flex-col items-center gap-3">
             <NTCLogoIcon size={56} />
             <div>
-              <h1 className="text-3xl font-bold text-foreground">NTC Mart</h1>
-              <p className="text-muted-foreground mt-1 text-sm">Nageshwara Trading Company, Banswara</p>
+              <h1 className="text-3xl font-bold text-foreground">Shankeshwar Traders</h1>
+              <p className="text-muted-foreground mt-1 text-sm">Shankeshwar Traders, Banswara</p>
             </div>
           </Link>
         </div>

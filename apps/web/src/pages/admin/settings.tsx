@@ -101,11 +101,11 @@ export default function AdminSettings() {
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
                     <Label className="text-sm">Store Name</Label>
-                    <Input value={settings.storeName} onChange={e => set("storeName", e.target.value)} placeholder="NTC Mart" />
+                    <Input value={settings.storeName} onChange={e => set("storeName", e.target.value)} placeholder="Shankeshwar Traders" />
                   </div>
                   <div className="space-y-1.5">
                     <Label className="text-sm">Full Legal Name</Label>
-                    <Input value={settings.fullName} onChange={e => set("fullName", e.target.value)} placeholder="Nageshwara Trading Company" />
+                    <Input value={settings.fullName} onChange={e => set("fullName", e.target.value)} placeholder="Shankeshwar Traders" />
                   </div>
                   <div className="space-y-1.5">
                     <Label className="text-sm">GSTIN</Label>
@@ -122,7 +122,7 @@ export default function AdminSettings() {
                   </div>
                   <div className="space-y-1.5">
                     <Label className="text-sm">Email Address</Label>
-                    <Input type="email" value={settings.email} onChange={e => set("email", e.target.value)} placeholder="contact@ntcmart.in" />
+                    <Input type="email" value={settings.email} onChange={e => set("email", e.target.value)} placeholder="contact@shankeshwartraders.in" />
                   </div>
                   <div className="sm:col-span-2 space-y-1.5">
                     <Label className="text-sm">Store Address</Label>

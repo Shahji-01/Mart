@@ -10,7 +10,7 @@ describe('Cart Endpoints', () => {
   let testCategoryId: number;
   let testProductId: number;
   let testVariantId: number;
-  const userEmail = `user_test_cart_${Date.now()}@ntcmarket.in`;
+  const userEmail = `user_test_cart_${Date.now()}@shankeshwartraders.in`;
 
   beforeAll(async () => {
     await request(app).post('/api/auth/register').send({

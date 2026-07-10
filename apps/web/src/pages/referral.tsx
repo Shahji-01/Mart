@@ -32,8 +32,8 @@ export default function ReferralPage() {
 
   function shareCode() {
     if (!data?.referralCode) return;
-    const text = `Join NTC Mart – Banswara's best online grocery store by Nageshwara Trading Company! Use my referral code ${data.referralCode} to get a discount on your first order. Shop at: ${window.location.origin}`;
-    if (navigator.share) { navigator.share({ title: "Join NTC Mart", text }); }
+    const text = `Join Shankeshwar Traders – Banswara's best online grocery store by Shankeshwar Traders! Use my referral code ${data.referralCode} to get a discount on your first order. Shop at: ${window.location.origin}`;
+    if (navigator.share) { navigator.share({ title: "Join Shankeshwar Traders", text }); }
     else { navigator.clipboard.writeText(text); toast({ title: "Invite link copied!" }); }
   }
 
@@ -46,7 +46,7 @@ export default function ReferralPage() {
             <Users className="h-8 w-8 text-primary" />
           </div>
           <h1 className="text-2xl font-bold mb-2">Refer Friends, Earn Points</h1>
-          <p className="text-muted-foreground">Invite your friends to NTC Mart. When they place their first order, you both earn loyalty points!</p>
+          <p className="text-muted-foreground">Invite your friends to Shankeshwar Traders. When they place their first order, you both earn loyalty points!</p>
         </div>
 
         {isError ? (
@@ -98,7 +98,7 @@ export default function ReferralPage() {
             {[
               { step: "1", title: "Share your code", desc: "Share your unique referral code with friends and family" },
               { step: "2", title: "Friend signs up", desc: "Your friend registers using your referral code" },
-              { step: "3", title: "Friend orders", desc: "Your friend places their first order on NTC Mart" },
+              { step: "3", title: "Friend orders", desc: "Your friend places their first order on Shankeshwar Traders" },
               { step: "4", title: "Both earn points", desc: "You earn 100 loyalty points, your friend gets a welcome bonus!" },
             ].map(({ step, title, desc }) => (
               <div key={step} className="flex gap-3">

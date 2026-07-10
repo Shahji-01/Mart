@@ -54,8 +54,8 @@ export function Footer() {
             <Link href="/" className="flex items-center gap-2 mb-4">
               <NTCLogoIcon size={36} />
               <div>
-                <span className="font-bold text-xl text-primary block leading-tight">NTC Mart</span>
-                <span className="text-[10px] text-muted-foreground">Nageshwara Trading Company</span>
+                <span className="font-bold text-xl text-primary block leading-tight">Shankeshwar Traders</span>
+                <span className="text-[10px] text-muted-foreground">Shankeshwar Traders</span>
               </div>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed">
@@ -118,7 +118,7 @@ export function Footer() {
             <ul className="space-y-3 text-sm">
               <li className="flex items-start gap-2.5 text-muted-foreground">
                 <MapPin className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
-                <span>Nageshwara Trading Company, Banswara, Rajasthan – 327001</span>
+                <span>Shankeshwar Traders, Banswara, Rajasthan – 327001</span>
               </li>
               <li className="flex items-center gap-2.5 text-muted-foreground">
                 <Phone className="h-4 w-4 text-primary flex-shrink-0" />
@@ -126,7 +126,7 @@ export function Footer() {
               </li>
               <li className="flex items-center gap-2.5 text-muted-foreground">
                 <Mail className="h-4 w-4 text-primary flex-shrink-0" />
-                <a href="mailto:hello@ntcmarket.in" className="hover:text-primary transition-colors">hello@ntcmarket.in</a>
+                <a href="mailto:hello@shankeshwartraders.in" className="hover:text-primary transition-colors">hello@shankeshwartraders.in</a>
               </li>
             </ul>
             <div className="mt-4 p-3 bg-primary/5 rounded-xl border border-primary/10">
@@ -140,13 +140,13 @@ export function Footer() {
         <div className="border-t mt-10 pt-8 mb-8">
           <div className="max-w-md">
             <h3 className="font-semibold text-sm mb-1">Stay Updated</h3>
-            <p className="text-xs text-muted-foreground mb-2">Get deals, new arrivals &amp; seasonal offers from NTC Mart.</p>
+            <p className="text-xs text-muted-foreground mb-2">Get deals, new arrivals &amp; seasonal offers from Shankeshwar Traders.</p>
             <NewsletterForm />
           </div>
         </div>
 
         <div className="border-t pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
-          <p>© {new Date().getFullYear()} Nageshwara Trading Company (NTC Mart). All rights reserved. Made with ❤️ in Banswara.</p>
+          <p>© {new Date().getFullYear()} Shankeshwar Traders (Shankeshwar Traders). All rights reserved. Made with ❤️ in Banswara.</p>
           <div className="flex items-center gap-4">
             <a href="#" className="hover:text-primary transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-primary transition-colors">Terms of Service</a>

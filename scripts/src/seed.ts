@@ -3,7 +3,7 @@ import { db, usersTable, categoriesTable, productsTable, productVariantsTable, b
 import { eq } from "drizzle-orm";
 
 async function seed() {
-  console.log("🌱 Seeding NTC Market database...");
+  console.log("🌱 Seeding Shankeshwar Traders database...");
 
   await db.delete(reviewsTable);
   await db.delete(orderItemsTable);
@@ -21,9 +21,9 @@ async function seed() {
   const customerHash = await bcrypt.hash("customer123", 10);
 
   const [admin] = await db.insert(usersTable).values({
-    name: "Admin NTC", email: "admin@ntcmarket.in", phone: "9876543210", passwordHash: adminHash, role: "admin",
+    name: "Admin NTC", email: "admin@shankeshwartraders.in", phone: "9876543210", passwordHash: adminHash, role: "admin",
   }).returning();
-  console.log("✅ Admin user: admin@ntcmarket.in / admin123");
+  console.log("✅ Admin user: admin@shankeshwartraders.in / admin123");
 
   const customerData = [
     { name: "Rajesh Kumar", email: "rajesh@example.com", phone: "9812345670" },

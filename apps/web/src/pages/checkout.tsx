@@ -198,7 +198,7 @@ export default function CheckoutPage() {
         key: rzpOrder.keyId,
         amount: rzpOrder.amount,
         currency: rzpOrder.currency,
-        name: "NTC Mart",
+        name: "Shankeshwar Traders",
         description: "Order payment",
         order_id: rzpOrder.orderId,
         handler: (resp: { razorpay_order_id: string; razorpay_payment_id: string; razorpay_signature: string }) => {
@@ -403,7 +403,7 @@ export default function CheckoutPage() {
                         <Wallet className="h-4 w-4 text-primary" />
                       </div>
                       <div className="text-left">
-                        <p className="font-medium text-sm">NTC Wallet</p>
+                        <p className="font-medium text-sm">ST Wallet</p>
                         <p className="text-xs text-muted-foreground">Balance: ₹{Number(wallet?.balance ?? 0).toFixed(2)}</p>
                       </div>
                     </div>

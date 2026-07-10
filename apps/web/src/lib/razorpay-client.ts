@@ -32,7 +32,7 @@ export async function openRazorpayCheckout(opts: {
     key: opts.keyId,
     amount: opts.amount,
     currency: opts.currency,
-    name: opts.name ?? "NTC Mart",
+    name: opts.name ?? "Shankeshwar Traders",
     description: opts.description ?? "Payment",
     order_id: opts.orderId,
     handler: opts.onSuccess,

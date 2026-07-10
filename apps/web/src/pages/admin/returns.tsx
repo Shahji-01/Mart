@@ -206,7 +206,7 @@ export default function AdminReturns() {
                   <div className="flex items-center gap-3 p-3 border rounded-lg">
                     <Switch checked={creditWallet} onCheckedChange={setCreditWallet} />
                     <div>
-                      <p className="text-sm font-medium">Credit to NTC Wallet</p>
+                      <p className="text-sm font-medium">Credit to ST Wallet</p>
                       <p className="text-xs text-muted-foreground">Instantly credit ₹{refundAmount || "0"} to customer's wallet</p>
                     </div>
                   </div>

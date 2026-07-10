@@ -58,7 +58,7 @@ function printOrderSlip(order: OrderRow) {
     .footer { margin-top: 20px; font-size: 11px; color: #888; }
     @media print { button { display: none; } }
   </style></head><body>
-  <h1>NTC Mart — Order Slip</h1>
+  <h1>Shankeshwar Traders — Order Slip</h1>
   <div class="sub">Order #${order.id} &nbsp;|&nbsp; ${new Date(order.createdAt).toLocaleString("en-IN")}</div>
   <hr/>
   <p><strong>Customer:</strong> ${order.userName ?? "Customer"}</p>
@@ -67,7 +67,7 @@ function printOrderSlip(order: OrderRow) {
   ${order.deliverySlot ? `<p><strong>Delivery Slot:</strong> ${order.deliverySlot}</p>` : ""}
   ${order.deliveryAddress ? `<p><strong>Address:</strong> ${order.deliveryAddress}</p>` : ""}
   <div class="total">Total: ₹${order.total.toFixed(0)}</div>
-  <div class="footer">NTC Mart (Nageshwara Trading Company) &bull; Banswara, Rajasthan 327001</div>
+  <div class="footer">Shankeshwar Traders (Shankeshwar Traders) &bull; Banswara, Rajasthan 327001</div>
   <br/><button onclick="window.print()">🖨 Print</button>
   </body></html>`);
   w.document.close();

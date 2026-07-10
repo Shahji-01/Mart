@@ -32,7 +32,7 @@ describe.skipIf(!HAS_DB)("Cart line isolation (Property 9)", () => {
     const { usersTable, categoriesTable, productsTable, productVariantsTable } = database;
     const [user] = await db.insert(usersTable).values({
       name: "Cart Isolation Test",
-      email: `cart_isolation_${tag}@ntcmarket.in`,
+      email: `cart_isolation_${tag}@shankeshwartraders.in`,
       phone: `9${tag.toString().slice(-9)}`,
       passwordHash: "x",
       role: "customer" as const,

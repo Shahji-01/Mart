@@ -10,13 +10,13 @@ interface SEOProps {
 }
 
 export function SEO({
-  title = "NTC Mart",
-  description = "Nageshwara Trading Company - Your trusted local grocery store.",
+  title = "Shankeshwar Traders",
+  description = "Shankeshwar Traders - Your trusted local grocery store.",
   image = "/banner.jpg",
-  url = "https://ntcmart.in",
+  url = "https://shankeshwartraders.in",
   jsonLd,
 }: SEOProps) {
-  const fullTitle = title === "NTC Mart" ? title : `${title} | NTC Mart`;
+  const fullTitle = title === "Shankeshwar Traders" ? title : `${title} | Shankeshwar Traders`;
 
   return (
     <Helmet>

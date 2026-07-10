@@ -55,8 +55,8 @@ export default function LoginPage() {
           <Link href="/" className="inline-flex flex-col items-center gap-3">
             <NTCLogoIcon size={56} />
             <div>
-              <h1 className="text-3xl font-bold text-foreground">NTC Mart</h1>
-              <p className="text-muted-foreground mt-1 text-sm">Nageshwara Trading Company, Banswara</p>
+              <h1 className="text-3xl font-bold text-foreground">Shankeshwar Traders</h1>
+              <p className="text-muted-foreground mt-1 text-sm">Shankeshwar Traders, Banswara</p>
             </div>
           </Link>
         </div>
@@ -113,7 +113,7 @@ export default function LoginPage() {
           </p>
           <div className="mt-4 p-3 bg-muted rounded-xl text-xs text-muted-foreground">
             <p className="font-semibold text-foreground/70 mb-1">Demo credentials</p>
-            <p><strong>Admin:</strong> admin@ntcmarket.in / admin123</p>
+            <p><strong>Admin:</strong> admin@shankeshwartraders.in / admin123</p>
           </div>
         </div>
       </div>

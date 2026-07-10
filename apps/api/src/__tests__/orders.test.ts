@@ -12,8 +12,8 @@ describe('Orders Endpoints', () => {
   let testProductId: number;
   let testVariantId: number;
   let createdOrderId: number;
-  const userEmail = `user_test_order_${Date.now()}@ntcmarket.in`;
-  const adminEmail = `admin_test_order_${Date.now()}@ntcmarket.in`;
+  const userEmail = `user_test_order_${Date.now()}@shankeshwartraders.in`;
+  const adminEmail = `admin_test_order_${Date.now()}@shankeshwartraders.in`;
 
   beforeAll(async () => {
     // 1. Create standard user

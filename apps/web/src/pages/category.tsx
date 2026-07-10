@@ -74,8 +74,8 @@ export default function CategoryPage() {
     <div className="min-h-screen bg-background">
       {category && (
         <SEO 
-          title={`${category.name} | NTC Mart`}
-          description={category.description || `Shop for ${category.name} at NTC Mart.`}
+          title={`${category.name} | Shankeshwar Traders`}
+          description={category.description || `Shop for ${category.name} at Shankeshwar Traders.`}
           image={category.imageUrl ?? undefined}
         />
       )}

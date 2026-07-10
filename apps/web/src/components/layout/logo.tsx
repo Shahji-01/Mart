@@ -6,8 +6,8 @@ interface NTCLogoProps {
 export function NTCLogoIcon({ size = 36, className = "" }: NTCLogoProps) {
   return (
     <img
-      src="/ntcmart-logo.png"
-      alt="NTC Mart"
+      src="/shankeshwar-logo.png"
+      alt="Shankeshwar Traders"
       width={size}
       height={size}
       className={`object-contain rounded-lg ${className}`}

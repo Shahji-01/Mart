@@ -1,6 +1,6 @@
 # Mart — Product Requirements Document (PRD)
 
-**Product:** Mart (Nageshwara Trading Company / "NTC Mart")
+**Product:** Mart (Shankeshwar Traders / "Shankeshwar Traders")
 **Type:** Blinkit-style quick-commerce grocery platform
 **Status:** Living document — reflects the current implemented system
 **Audience:** Engineering, product, operations, QA, and onboarding

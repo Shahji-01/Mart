@@ -7,7 +7,7 @@ import { eq } from 'drizzle-orm';
 describe('Categories Endpoints', () => {
   let adminToken = '';
   let testCategoryId: number;
-  const adminEmail = `admin_test_cat_${Date.now()}@ntcmarket.in`;
+  const adminEmail = `admin_test_cat_${Date.now()}@shankeshwartraders.in`;
 
   beforeAll(async () => {
     await request(app).post('/api/auth/register').send({

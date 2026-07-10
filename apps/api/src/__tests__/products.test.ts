@@ -8,7 +8,7 @@ describe('Products Endpoints', () => {
   let adminToken = '';
   let testCategoryId: number;
   let testProductId: number;
-  const adminEmail = `admin_test_${Date.now()}@ntcmarket.in`;
+  const adminEmail = `admin_test_${Date.now()}@shankeshwartraders.in`;
 
   beforeAll(async () => {
     // Register and login an admin
