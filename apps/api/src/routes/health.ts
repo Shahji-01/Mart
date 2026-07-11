@@ -13,7 +13,7 @@ router.get("/healthz", async (_req, res, next) => {
     res.json(data);
   } catch (error) {
     logger.error({ err: error }, "Health check failed");
-    res.status(503).json({ status: "error", message: "Database connection failed" });
+    res.status(503).json({ status: "error", message: "Database connection failed", error: (error as Error).message });
   }
 });
 

@@ -90,7 +90,7 @@ Sentry.setupExpressErrorHandler(app);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   logger.error(err);
-  res.status(500).json({ error: "Internal Server Error", requestId: req.id });
+  res.status(500).json({ error: "Internal Server Error", message: err.message, stack: err.stack, requestId: req.id });
 });
 
 export default app;
