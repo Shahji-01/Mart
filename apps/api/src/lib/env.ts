@@ -24,10 +24,17 @@ const envSchema = z.object({
   // Webhook signing secret (Razorpay Dashboard → Settings → Webhooks). When set,
   // /api/payments/razorpay/webhook verifies and reconciles payment events.
   RAZORPAY_WEBHOOK_SECRET: z.string().optional(),
+  REDIS_URL: z.string().optional(),
+  MEILISEARCH_HOST: z.string().optional(),
+  MEILISEARCH_API_KEY: z.string().optional(),
+  CRON_SECRET: z.string().optional(),
   // Web Push (VAPID). Generate with `npx web-push generate-vapid-keys`.
   VAPID_PUBLIC_KEY: z.string().optional(),
   VAPID_PRIVATE_KEY: z.string().optional(),
   VAPID_SUBJECT: z.string().optional(),
+  CLOUDINARY_CLOUD_NAME: z.string().optional(),
+  CLOUDINARY_API_KEY: z.string().optional(),
+  CLOUDINARY_API_SECRET: z.string().optional(),
 });
 
 export const env = envSchema.parse(process.env);

@@ -6,6 +6,8 @@ import { eq } from "drizzle-orm";
 import { env } from "../lib/env";
 import { logger } from "../lib/logger";
 import { tokenVersionMatches } from "../lib/token-version";
+import { createAdapter } from "@socket.io/redis-adapter";
+import { Redis } from "ioredis";
 
 let io: SocketIOServer | null = null;
 
@@ -19,11 +21,29 @@ interface SocketTokenClaims {
 export const socketService = {
   init(server: HttpServer) {
     const allowedOrigins = env.ALLOWED_ORIGIN.split(",").map((o) => o.trim());
+    
+    let adapter;
+    if (env.REDIS_URL) {
+      try {
+        const pubClient = new Redis(env.REDIS_URL);
+        const subClient = pubClient.duplicate();
+        
+        pubClient.on("error", (err) => logger.error({ err: err.message }, "Redis pubClient Error"));
+        subClient.on("error", (err) => logger.error({ err: err.message }, "Redis subClient Error"));
+
+        adapter = createAdapter(pubClient, subClient);
+        logger.info("Socket.io using Redis adapter");
+      } catch (err) {
+        logger.error({ err }, "Failed to initialize Redis adapter for Socket.io");
+      }
+    }
+
     io = new SocketIOServer(server, {
       cors: {
         origin: allowedOrigins,
         credentials: true,
       },
+      adapter,
     });
 
     io.use(async (socket, next) => {

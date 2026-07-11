@@ -26,13 +26,8 @@ const server = app.listen(port, () => {
 
 socketService.init(server);
 
-// Periodic subscription runner (auto-reorder). Lightweight in-process scheduler;
-// for multi-instance deployments move this to a dedicated cron/worker.
-import { subscriptionsService } from "./services/subscriptions.service";
-const SUBSCRIPTION_INTERVAL_MS = 15 * 60 * 1000; // every 15 min
-setInterval(() => {
-  subscriptionsService.runDue().catch((err) => logger.error({ err }, "Subscription runner failed"));
-}, SUBSCRIPTION_INTERVAL_MS);
+// Periodic subscription runner (auto-reorder).
+// In production, this is now triggered by Vercel Cron hitting /api/cron/subscriptions
 
 server.on("error", (err) => {
   logger.error({ err }, "Error listening on port");

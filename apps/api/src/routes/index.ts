@@ -26,8 +26,12 @@ import settingsRouter from "./settings";
 import paymentsRouter from "./payments";
 import pushRouter from "./push";
 import subscriptionsRouter from "./subscriptions";
+import uploadRouter from "./upload";
+import cronRouter from "./cron";
 
 const router: IRouter = Router();
+
+router.use("/cron", cronRouter);
 
 router.use(healthRouter);
 router.use(authRouter);
@@ -57,5 +61,6 @@ router.use(settingsRouter);
 router.use(paymentsRouter);
 router.use(pushRouter);
 router.use(subscriptionsRouter);
+router.use(uploadRouter);
 
 export default router;

@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "buildCommand": "pnpm run build",
+  "builds": [
+    {
+      "src": "apps/api/src/vercel.ts",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "apps/web/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "apps/api/src/vercel.ts"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "apps/web/$1"
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron/subscriptions",
+      "schedule": "*/15 * * * *"
+    }
+  ]
+}

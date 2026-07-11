@@ -1,4 +1,16 @@
 import express, { type Express } from "express";
+import * as Sentry from "@sentry/node";
+import { nodeProfilingIntegration } from "@sentry/profiling-node";
+
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+  integrations: [
+    nodeProfilingIntegration(),
+  ],
+  tracesSampleRate: 1.0,
+  profilesSampleRate: 1.0,
+});
+
 import cors from "cors";
 import pinoHttp from "pino-http";
 import router from "./routes";
@@ -72,6 +84,8 @@ app.use(cookieParser());
 app.use(xssMiddleware);
 
 app.use("/api", router);
+
+Sentry.setupExpressErrorHandler(app);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   logger.error(err);

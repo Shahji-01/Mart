@@ -1,14 +1,14 @@
 import type { Request, Response, NextFunction } from "express";
-import { cacheService, cache } from "../services/cache.service";
+import { cacheService } from "../services/cache.service";
 
-export const cacheMiddleware = (req: Request, res: Response, next: NextFunction) => {
+export const cacheMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   if (req.method !== "GET") {
     next();
     return;
   }
 
   const key = req.originalUrl;
-  const cachedResponse = cache.get(key);
+  const cachedResponse = await cacheService.get(key);
 
   if (cachedResponse) {
     res.json(cachedResponse);
@@ -19,7 +19,7 @@ export const cacheMiddleware = (req: Request, res: Response, next: NextFunction)
   res.json = (body) => {
     // Only cache successful responses
     if (res.statusCode >= 200 && res.statusCode < 300) {
-      cache.set(key, body);
+      cacheService.set(key, body).catch(err => console.error("Cache set error", err));
     }
     return originalJson(body);
   };

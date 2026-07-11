@@ -2,6 +2,7 @@ import { db, productsTable, productVariantsTable, categoriesTable, stockNotifica
 import { eq, ilike, and, sql, ne, isNull, desc, inArray } from "drizzle-orm";
 import { cacheService } from "./cache.service";
 import { pushService } from "./push.service";
+import { searchService } from "./search.service";
 import { logger } from "../lib/logger";
 
 async function formatProduct(p: typeof productsTable.$inferSelect, categoryName: string) {
@@ -34,16 +35,33 @@ export class ProductsService {
   async getProducts(params: { categoryId?: number; search?: string; inStock?: boolean; page: number; limit: number }) {
     const cacheKey = `products_${JSON.stringify(params)}`;
     return cacheService.getOrSet(cacheKey, async () => {
+      let meilisearchIds: number[] | null = null;
+      if (params.search && searchService.isConfigured()) {
+        meilisearchIds = await searchService.search(params.search, { limit: params.limit, offset: (params.page - 1) * params.limit, categoryId: params.categoryId });
+      }
+
       const conditions: ReturnType<typeof eq>[] = [];
-    if (params.categoryId) conditions.push(eq(productsTable.categoryId, params.categoryId));
-    if (params.search) {
-      conditions.push(sql`to_tsvector('english', ${productsTable.name} || ' ' || coalesce(${productsTable.description}, '')) @@ plainto_tsquery('english', ${params.search})`);
-    }
+      if (meilisearchIds !== null) {
+        if (meilisearchIds.length === 0) return { data: [], total: 0, page: params.page, limit: params.limit };
+        conditions.push(inArray(productsTable.id, meilisearchIds));
+      } else {
+        if (params.categoryId) conditions.push(eq(productsTable.categoryId, params.categoryId));
+        if (params.search) {
+          conditions.push(sql`to_tsvector('english', ${productsTable.name} || ' ' || coalesce(${productsTable.description}, '')) @@ plainto_tsquery('english', ${params.search})`);
+        }
+      }
 
     const where = conditions.length > 0 ? and(...conditions) : undefined;
-    const offset = (params.page - 1) * params.limit;
+    const offset = meilisearchIds !== null ? 0 : (params.page - 1) * params.limit;
+    const limit = meilisearchIds !== null ? 100 : params.limit;
     
-    const products = await db.select().from(productsTable).where(where).limit(params.limit).offset(offset);
+    const products = await db.select().from(productsTable).where(where).limit(limit).offset(offset);
+    
+    // Sort products based on Meilisearch ID order if applicable
+    if (meilisearchIds !== null) {
+      products.sort((a, b) => meilisearchIds!.indexOf(a.id) - meilisearchIds!.indexOf(b.id));
+    }
+    
     const [{ total }] = await db.select({ total: sql<number>`count(*)::int` }).from(productsTable).where(where);
 
     const cats = await db.select().from(categoriesTable);
@@ -119,6 +137,7 @@ export class ProductsService {
       );
     }
     const [cat] = await db.select().from(categoriesTable).where(eq(categoriesTable.id, p.categoryId));
+    await searchService.indexProduct(p, cat?.name ?? "");
     cacheService.invalidate("products_");
     cacheService.invalidate("/api/products");
     return await formatProduct(p, cat?.name ?? "");
@@ -165,12 +184,14 @@ export class ProductsService {
     const [p] = await db.update(productsTable).set(updates).where(eq(productsTable.id, id)).returning();
     if (!p) return null;
     const [cat] = await db.select().from(categoriesTable).where(eq(categoriesTable.id, p.categoryId));
+    await searchService.indexProduct(p, cat?.name ?? "");
     cacheService.invalidate("products_");
     return await formatProduct(p, cat?.name ?? "");
   }
 
   async deleteProduct(id: number) {
     const result = await db.delete(productsTable).where(eq(productsTable.id, id));
+    await searchService.removeProduct(id);
     cacheService.invalidate("products_");
     cacheService.invalidate("/api/products");
     return result;

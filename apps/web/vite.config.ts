@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
+import { sentryVitePlugin } from "@sentry/vite-plugin";
 import path from "path";
 // PORT only affects the dev/preview server, never `vite build`. Default it so
 // that production builds (CI, Docker) don't have to provide a server port.
@@ -20,6 +21,11 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
+    sentryVitePlugin({
+      org: process.env.SENTRY_ORG || "mart-org",
+      project: process.env.SENTRY_PROJECT || "mart-web",
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+    }),
   ],
   resolve: {
     alias: {
