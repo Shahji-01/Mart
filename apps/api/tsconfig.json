@@ -3,7 +3,11 @@
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": "src",
-    "types": ["node"]
+    "types": ["node"],
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "noEmitOnError": false,
+    "skipLibCheck": true
   },
   "include": ["src"],
   "references": [
