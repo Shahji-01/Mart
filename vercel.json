@@ -1,28 +1,12 @@
 {
   "version": 2,
   "installCommand": "pnpm install --no-frozen-lockfile",
-  "buildCommand": "pnpm run build",
-  "builds": [
+  "buildCommand": "pnpm --filter @workspace/web run build && cd apps/api && node build.mjs",
+  "outputDirectory": "apps/web/dist/public",
+  "rewrites": [
     {
-      "src": "apps/api/src/vercel.ts",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "apps/web/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "apps/api/src/vercel.ts"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "apps/web/$1"
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
     }
   ],
   "crons": [
