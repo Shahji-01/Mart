@@ -1,5 +1,5 @@
-import { db, reviewsTable, usersTable } from "@workspace/database";
-import { eq, and } from "drizzle-orm";
+import { db, reviewsTable, usersTable, ordersTable, orderItemsTable } from "@workspace/database";
+import { eq, and, inArray } from "drizzle-orm";
 
 export class ReviewsService {
   async getProductReviews(productId: number, isAdmin: boolean) {
@@ -8,9 +8,11 @@ export class ReviewsService {
         ? eq(reviewsTable.productId, productId)
         : and(eq(reviewsTable.productId, productId), eq(reviewsTable.isApproved, true))
     );
-    const users = await db.select({ id: usersTable.id, name: usersTable.name }).from(usersTable);
+    const userIds = [...new Set(reviews.map(r => r.userId))];
+    const users = userIds.length > 0 
+      ? await db.select({ id: usersTable.id, name: usersTable.name }).from(usersTable).where(inArray(usersTable.id, userIds))
+      : [];
     const userMap = new Map(users.map(u => [u.id, u.name]));
-    
     return reviews.map(r => ({
       id: r.id, 
       userId: r.userId, 
@@ -30,6 +32,21 @@ export class ReviewsService {
     const existing = await db.select().from(reviewsTable)
       .where(and(eq(reviewsTable.userId, userId), eq(reviewsTable.productId, productId))).limit(1);
     if (existing.length > 0) throw new Error("You have already reviewed this product");
+
+    // Enforce verified purchase: user must have a delivered order containing this product
+    const orders = await db.select({ id: ordersTable.id })
+      .from(ordersTable)
+      .innerJoin(orderItemsTable, eq(ordersTable.id, orderItemsTable.orderId))
+      .where(and(
+        eq(ordersTable.userId, userId),
+        eq(ordersTable.status, "delivered"),
+        eq(orderItemsTable.productId, productId)
+      ))
+      .limit(1);
+      
+    if (orders.length === 0) {
+      throw new Error("You can only review products you have purchased and received.");
+    }
     
     const [review] = await db.insert(reviewsTable).values({
       userId, 
@@ -59,7 +76,10 @@ export class ReviewsService {
     if (status === "pending") reviews = reviews.filter(r => !r.isApproved);
     else if (status === "approved") reviews = reviews.filter(r => r.isApproved);
     
-    const users = await db.select({ id: usersTable.id, name: usersTable.name }).from(usersTable);
+    const userIds = [...new Set(reviews.map(r => r.userId))];
+    const users = userIds.length > 0 
+      ? await db.select({ id: usersTable.id, name: usersTable.name }).from(usersTable).where(inArray(usersTable.id, userIds))
+      : [];
     const userMap = new Map(users.map(u => [u.id, u.name]));
     
     return reviews.map(r => ({
