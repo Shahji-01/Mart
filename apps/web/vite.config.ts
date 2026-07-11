@@ -21,11 +21,12 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-    sentryVitePlugin({
-      org: process.env.SENTRY_ORG || "mart-org",
-      project: process.env.SENTRY_PROJECT || "mart-web",
-      authToken: process.env.SENTRY_AUTH_TOKEN,
-    }),
+    // Sentry Vite Plugin temporarily disabled
+    // sentryVitePlugin({
+    //   org: process.env.SENTRY_ORG || "mart-org",
+    //   project: process.env.SENTRY_PROJECT || "mart-web",
+    //   authToken: process.env.SENTRY_AUTH_TOKEN,
+    // }),
   ],
   resolve: {
     alias: {
