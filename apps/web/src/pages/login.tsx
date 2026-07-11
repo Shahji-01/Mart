@@ -111,10 +111,7 @@ export default function LoginPage() {
           <p className="text-center text-sm text-muted-foreground mt-2">
             <Link href="/forgot-password" className="text-primary hover:underline">Forgot password?</Link>
           </p>
-          <div className="mt-4 p-3 bg-muted rounded-xl text-xs text-muted-foreground">
-            <p className="font-semibold text-foreground/70 mb-1">Demo credentials</p>
-            <p><strong>Admin:</strong> admin@shankeshwartraders.in / admin123</p>
-          </div>
+
         </div>
       </div>
     </div>
