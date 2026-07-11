@@ -3,7 +3,12 @@
   "installCommand": "pnpm install --no-frozen-lockfile",
   "buildCommand": "pnpm --filter @workspace/web run build && cd apps/api && node build.mjs",
   "outputDirectory": "apps/web/dist/public",
-
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api"
+    }
+  ],
   "crons": [
     {
       "path": "/api/cron/subscriptions",
