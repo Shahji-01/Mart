@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { db } from "@workspace/database";
-import { usersTable, referralsTable, addressesTable, cartTable, wishlistTable, pushSubscriptionsTable } from "@workspace/database";
+import { usersTable, referralsTable, addressesTable, cartItemsTable, cartSessionsTable, wishlistItemsTable, pushSubscriptionsTable } from "@workspace/database";
 import { eq, sql } from "drizzle-orm";
 import crypto from "crypto";
 import { env } from "../lib/env";
@@ -143,8 +143,9 @@ export class AuthService {
     await db.transaction(async (tx) => {
       // 1. Delete associated non-essential data
       await tx.delete(addressesTable).where(eq(addressesTable.userId, userId));
-      await tx.delete(cartTable).where(eq(cartTable.userId, userId));
-      await tx.delete(wishlistTable).where(eq(wishlistTable.userId, userId));
+      await tx.delete(cartItemsTable).where(eq(cartItemsTable.userId, userId));
+      await tx.delete(cartSessionsTable).where(eq(cartSessionsTable.userId, userId));
+      await tx.delete(wishlistItemsTable).where(eq(wishlistItemsTable.userId, userId));
       await tx.delete(pushSubscriptionsTable).where(eq(pushSubscriptionsTable.userId, userId));
 
       // 2. Anonymize user data to prevent FK constraint failures on orders
