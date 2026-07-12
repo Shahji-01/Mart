@@ -302,6 +302,7 @@ function AddressesTab({ token, qc, toast }: { token: string; qc: ReturnType<type
 }
 
 function SecurityTab({ token, toast }: { token: string; toast: ReturnType<typeof useToast>["toast"] }) {
+  const [, setLocation] = useLocation();
   const [form, setForm] = useState({ currentPassword: "", newPassword: "", confirmPassword: "" });
 
   const changePwMutation = useMutation({
@@ -317,6 +318,23 @@ function SecurityTab({ token, toast }: { token: string; toast: ReturnType<typeof
     onSuccess: () => {
       toast({ title: "Password changed successfully" });
       setForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
+    },
+    onError: (e: Error) => toast({ title: e.message, variant: "destructive" }),
+  });
+
+  const deleteAccountMutation = useMutation({
+    mutationFn: async () => {
+      const res = await customFetch("/api/auth/profile", {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error("Failed to delete account");
+      return res.json();
+    },
+    onSuccess: () => {
+      authStore.removeToken();
+      setLocation("/");
+      toast({ title: "Account deleted successfully" });
     },
     onError: (e: Error) => toast({ title: e.message, variant: "destructive" }),
   });
@@ -358,6 +376,29 @@ function SecurityTab({ token, toast }: { token: string; toast: ReturnType<typeof
           {changePwMutation.isPending ? "Updating…" : "Update Password"}
         </Button>
       </div>
+      
+      <Separator className="my-8" />
+      
+      <div className="flex items-center gap-3 mb-5">
+        <div className="w-10 h-10 rounded-full bg-destructive/10 flex items-center justify-center">
+          <Trash2 className="h-5 w-5 text-destructive" />
+        </div>
+        <div>
+          <p className="font-semibold text-destructive">Danger Zone</p>
+          <p className="text-sm text-muted-foreground">Permanently delete your account and personal data</p>
+        </div>
+      </div>
+      <Button 
+        variant="destructive" 
+        onClick={() => {
+          if (window.confirm("Are you absolutely sure? This will anonymize your personal data and cannot be undone.")) {
+            deleteAccountMutation.mutate();
+          }
+        }}
+        disabled={deleteAccountMutation.isPending}
+      >
+        {deleteAccountMutation.isPending ? "Deleting..." : "Delete Account"}
+      </Button>
     </div>
   );
 }

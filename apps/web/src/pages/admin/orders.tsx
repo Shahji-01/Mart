@@ -9,6 +9,7 @@ import { Search, ExternalLink, CreditCard, Banknote, Printer, CheckSquare, Squar
 import { useGetOrders, useUpdateOrderStatus, getGetOrdersQueryKey } from "@workspace/api-client";
 import { useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
+import { Pagination, PaginationContent, PaginationItem, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { Navbar } from "@/components/layout/navbar";
 import { AdminSidebar } from "./dashboard";
 
@@ -82,9 +83,10 @@ export default function AdminOrders() {
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<Set<number>>(new Set());
   const [bulkStatus, setBulkStatus] = useState<string>("");
+  const [page, setPage] = useState(1);
 
   const activeFilter = filterStatus && filterStatus !== "_all" ? filterStatus : undefined;
-  const { data: allOrders, isLoading } = useGetOrders(activeFilter ? { status: activeFilter } : undefined);
+  const { data: allOrders, isLoading } = useGetOrders(activeFilter ? { status: activeFilter, page } : { page });
   const updateStatus = useUpdateOrderStatus();
 
   const orders = search.trim()
@@ -286,6 +288,20 @@ export default function AdminOrders() {
                     {search ? `No orders matching "${search}"` : "No orders found"}
                   </div>
                 )}
+                
+                <div className="p-4 border-t flex items-center justify-end">
+                  <Pagination className="w-auto mx-0">
+                    <PaginationContent>
+                      <PaginationItem>
+                        <Button variant="outline" size="sm" onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}>Previous</Button>
+                      </PaginationItem>
+                      <PaginationItem>
+                        {/* We assume the default page limit is 50 for the backend */}
+                        <Button variant="outline" size="sm" onClick={() => setPage(p => p + 1)} disabled={!orders || orders.length < 50}>Next</Button>
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                </div>
               </div>
             )}
           </div>

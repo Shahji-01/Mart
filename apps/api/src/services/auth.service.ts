@@ -1,8 +1,8 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { db } from "@workspace/database";
-import { usersTable, referralsTable } from "@workspace/database";
-import { eq } from "drizzle-orm";
+import { usersTable, referralsTable, addressesTable, cartTable, wishlistTable, pushSubscriptionsTable } from "@workspace/database";
+import { eq, sql } from "drizzle-orm";
 import crypto from "crypto";
 import { env } from "../lib/env";
 import { logger } from "../lib/logger";
@@ -122,7 +122,7 @@ export class AuthService {
     const resetTokenExpiry = new Date(Date.now() + 30 * 60 * 1000);
     await db.update(usersTable).set({ resetToken, resetTokenExpiry }).where(eq(usersTable.id, user.id));
     if (env.NODE_ENV === "development") {
-      logger.debug({ email }, `[DEV ONLY] Password reset token: ${resetToken}`);
+      logger.debug(`[DEV ONLY] Password reset token generated: ${resetToken}`);
     }
 
     return {
@@ -137,6 +137,29 @@ export class AuthService {
   async invalidatePasswordResetToken(userId: number) {
     await db.update(usersTable).set({ resetToken: null, resetTokenExpiry: null }).where(eq(usersTable.id, userId));
     return { message: "Reset token invalidated." };
+  }
+
+  async deleteAccount(userId: number) {
+    await db.transaction(async (tx) => {
+      // 1. Delete associated non-essential data
+      await tx.delete(addressesTable).where(eq(addressesTable.userId, userId));
+      await tx.delete(cartTable).where(eq(cartTable.userId, userId));
+      await tx.delete(wishlistTable).where(eq(wishlistTable.userId, userId));
+      await tx.delete(pushSubscriptionsTable).where(eq(pushSubscriptionsTable.userId, userId));
+
+      // 2. Anonymize user data to prevent FK constraint failures on orders
+      await tx.update(usersTable).set({
+        name: "Deleted User",
+        email: `deleted_${userId}@shankeshwartraders.in`,
+        phone: "0000000000",
+        passwordHash: "deleted",
+        tokenVersion: sql`${usersTable.tokenVersion} + 1`,
+        resetToken: null,
+        resetTokenExpiry: null,
+      }).where(eq(usersTable.id, userId));
+    });
+
+    return { message: "Account deleted successfully" };
   }
 
   async resetPassword(data: any) {

@@ -16,11 +16,13 @@ function getPool(): pg.Pool {
         "DATABASE_URL must be set. Did you forget to provision a database?",
       );
     }
+    const isProd = process.env.NODE_ENV === "production";
     _pool = new Pool({
       connectionString: process.env.DATABASE_URL,
       max: parseInt(process.env.DB_MAX_CONNECTIONS || "20"),
       idleTimeoutMillis: 30000,
       connectionTimeoutMillis: 2000,
+      ssl: isProd ? { rejectUnauthorized: false } : undefined,
     });
   }
   return _pool;

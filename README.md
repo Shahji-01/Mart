@@ -152,6 +152,7 @@ Run these scripts from the **root** of the monorepo:
 
 ## 🔐 Security Best Practices (Reminder)
 - **Secrets & Keys:** Ensure secrets (`SESSION_SECRET`, `JWT_SECRET`, database passwords) are supplied securely via environment variables and never hardcoded or committed to version control.
+- **Git History Secrets Warning:** ⚠️ **CRITICAL:** If any secrets were previously hardcoded in your source code while testing, you must rotate them immediately before deploying to production. Those old values still exist in your Git history and could be compromised.
 - **CORS & Origins:** Verify that `ALLOWED_ORIGIN` is configured accurately in production to prevent unauthorized access.
 - **Trust Proxy:** If deployed behind a reverse proxy (like Nginx or AWS ALB), set `TRUST_PROXY=1` in the API environment to ensure rate limiting operates correctly on client IP addresses.
 

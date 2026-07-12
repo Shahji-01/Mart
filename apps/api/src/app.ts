@@ -70,7 +70,11 @@ const authLimiter = rateLimit({
   message: { error: "Too many requests from this IP, please try again after 15 minutes" },
 });
 
-app.use(helmet());
+app.use(helmet({
+  frameguard: { action: "deny" },
+  hsts: { maxAge: 31536000, includeSubDomains: true, preload: true }, // 1 year
+  contentSecurityPolicy: { directives: { defaultSrc: ["'self'"], scriptSrc: ["'self'"] } }
+}));
 const allowedOrigins = env.ALLOWED_ORIGIN.split(',').map(o => o.trim());
 app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(limiter);
@@ -90,7 +94,13 @@ Sentry.setupExpressErrorHandler(app);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   logger.error(err);
-  res.status(500).json({ error: "Internal Server Error", message: err.message, stack: err.stack, requestId: req.id });
+  const isProd = env.NODE_ENV === "production";
+  res.status(500).json({ 
+    error: "Internal Server Error", 
+    message: isProd ? "An unexpected error occurred" : err.message, 
+    stack: isProd ? undefined : err.stack, 
+    requestId: req.id 
+  });
 });
 
 export default app;

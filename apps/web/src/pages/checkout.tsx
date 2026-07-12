@@ -243,6 +243,9 @@ export default function CheckoutPage() {
 
   const items = cart?.items ?? [];
   const activeSlots = slots.filter(s => s.isActive);
+  const isAddressValid = (form.watch("address") || "").length >= 10;
+  const isSlotValid = activeSlots.length === 0 || selectedSlot !== null;
+  const canProceed = isAddressValid && isSlotValid && items.length > 0;
 
   return (
     <div className="min-h-screen bg-background">
@@ -530,7 +533,7 @@ export default function CheckoutPage() {
                 form="checkout-form"
                 type="submit"
                 className="w-full mt-4 bg-primary h-11 font-semibold"
-                disabled={placeOrder.isPending || items.length === 0}
+                disabled={placeOrder.isPending || !canProceed}
                 data-testid="button-place-order"
               >
                 {placeOrder.isPending ? "Placing Order..." : `Place Order — ₹${finalTotal.toFixed(0)}`}

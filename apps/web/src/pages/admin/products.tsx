@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useGetProducts, useGetCategories, useCreateProduct, useUpdateProduct, useDeleteProduct, getGetProductsQueryKey } from "@workspace/api-client";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { Navbar } from "@/components/layout/navbar";
 import { AdminSidebar } from "./dashboard";
 import { authStore } from "@/lib/auth-store";
@@ -31,10 +32,12 @@ export default function AdminProducts() {
   const [editing, setEditing] = useState<ProductRow | null>(null);
   const [search, setSearch] = useState("");
   const [catFilter, setCatFilter] = useState<string>("");
+  const [page, setPage] = useState(1);
   const [form, setForm] = useState(BLANK_FORM);
   const [variants, setVariants] = useState<VariantForm[]>([{ ...BLANK_VARIANT }]);
 
-  const params = { search: search || undefined, categoryId: (catFilter && catFilter !== "_all") ? parseInt(catFilter) : undefined, limit: 50 };
+  const limit = 10;
+  const params = { search: search || undefined, categoryId: (catFilter && catFilter !== "_all") ? parseInt(catFilter) : undefined, limit, page };
   const { data: productsPage, isLoading } = useGetProducts(params, { query: { queryKey: getGetProductsQueryKey(params) } });
   const { data: categories } = useGetCategories();
   const createProduct = useCreateProduct();
@@ -156,9 +159,9 @@ export default function AdminProducts() {
           <div className="flex gap-3 flex-wrap">
             <div className="relative flex-1 min-w-48">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input data-testid="input-search" placeholder="Search products..." className="pl-10" value={search} onChange={e => setSearch(e.target.value)} />
+              <Input data-testid="input-search" placeholder="Search products..." className="pl-10" value={search} onChange={e => { setSearch(e.target.value); setPage(1); }} />
             </div>
-            <Select value={catFilter || "_all"} onValueChange={v => setCatFilter(v === "_all" ? "" : v)}>
+            <Select value={catFilter || "_all"} onValueChange={v => { setCatFilter(v === "_all" ? "" : v); setPage(1); }}>
               <SelectTrigger className="w-44" data-testid="select-category-filter"><SelectValue placeholder="All categories" /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="_all">All categories</SelectItem>
@@ -230,6 +233,24 @@ export default function AdminProducts() {
                 </table>
                 {!productsPage?.data.length && (
                   <div className="text-center py-12 text-muted-foreground text-sm">No products found</div>
+                )}
+                
+                {productsPage && productsPage.total > limit && (
+                  <div className="p-4 border-t flex items-center justify-between">
+                    <p className="text-sm text-muted-foreground">
+                      Showing {(page - 1) * limit + 1} to {Math.min(page * limit, productsPage.total)} of {productsPage.total}
+                    </p>
+                    <Pagination className="w-auto mx-0">
+                      <PaginationContent>
+                        <PaginationItem>
+                          <Button variant="outline" size="sm" onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}>Previous</Button>
+                        </PaginationItem>
+                        <PaginationItem>
+                          <Button variant="outline" size="sm" onClick={() => setPage(p => p + 1)} disabled={page * limit >= productsPage.total}>Next</Button>
+                        </PaginationItem>
+                      </PaginationContent>
+                    </Pagination>
+                  </div>
                 )}
               </div>
             )}

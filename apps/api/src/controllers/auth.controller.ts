@@ -59,13 +59,27 @@ export class AuthController {
         res.status(401).json({ error: "Unauthorized" });
         return;
       }
-      const result = await authService.updateProfile(req.user.userId, req.body);
+      const result = await authService.updateProfile(req.user.userId, req.validated.body);
       res.json(result);
     } catch (err: any) {
       if (err.message === "User not found") {
         res.status(404).json({ error: err.message });
         return;
       }
+      next(err);
+    }
+  }
+
+  async deleteAccount(req: Request, res: Response, next: NextFunction) {
+    try {
+      if (!req.user) {
+        res.status(401).json({ error: "Unauthorized" });
+        return;
+      }
+      const result = await authService.deleteAccount(req.user.userId);
+      res.clearCookie("token");
+      res.json(result);
+    } catch (err: any) {
       next(err);
     }
   }

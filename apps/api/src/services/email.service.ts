@@ -44,7 +44,7 @@ class EmailService {
           </div>
         `,
       });
-      logger.info(`Welcome email sent to ${to}. Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
+      logger.info(`Welcome email sent (Preview URL: ${nodemailer.getTestMessageUrl(info)})`);
     } catch (err) {
       logger.error({ err }, "Error sending welcome email");
     }
@@ -68,7 +68,7 @@ class EmailService {
           </div>
         `,
       });
-      logger.info(`Order confirmation sent to ${to}. Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
+      logger.info(`Order confirmation sent (Preview URL: ${nodemailer.getTestMessageUrl(info)})`);
     } catch (err) {
       logger.error({ err }, "Error sending order confirmation email");
     }
