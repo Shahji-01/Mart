@@ -6,7 +6,7 @@ const config: CapacitorConfig = {
   webDir: 'dist/public',
   server: {
     androidScheme: 'https',
-    hostname: 'mart.shahji.dev'
+    hostname: 'app.mart.shahji.dev'
   }
 };
 
