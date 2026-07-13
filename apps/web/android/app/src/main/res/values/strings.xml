@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Shankeswar Traders</string>
+    <string name="title_activity_main">Shankeswar Traders</string>
+    <string name="package_name">shankeswartraders.app</string>
+    <string name="custom_url_scheme">shankeswartraders.app</string>
+</resources>
